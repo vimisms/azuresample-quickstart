@@ -34,6 +34,7 @@ def getSubDetails():
     subscription = next(subscription_client.subscriptions.list())
     subscription_id = subscription.subscription_id
     print(subscription_id)
+    return render_template('hello.html', name = subscription_id)
     
 
 if __name__ == '__main__':
