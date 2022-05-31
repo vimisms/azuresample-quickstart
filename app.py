@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,timedelta
 from urllib import response
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from azure.keyvault.secrets import SecretClient
@@ -13,7 +13,7 @@ def index():
     credential = DefaultAzureCredential()
     client = SecretClient(vault_url=vault_uri, credential=credential)
     print("\n.. Create Secret")
-    expires = datetime.utcnow() + datetime.timedelta(days=365)
+    expires = datetime.now() + timedelta(days=365)
     secret = client.set_secret("helloWorldSecretName", "helloWorldSecretValue", expires_on=expires)
     print("Secret with name '{0}' created with value '{1}'".format(secret.name, secret.value))
     print("Secret with name '{0}' expires on '{1}'".format(secret.name, secret.properties.expires_on))
