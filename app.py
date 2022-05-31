@@ -13,14 +13,14 @@ def index():
     credential = DefaultAzureCredential()
     client = SecretClient(vault_url=vault_uri, credential=credential)
     print("\n.. Create Secret")
-    expires = datetime.datetime.utcnow() + datetime.timedelta(days=365)
+    expires = datetime.utcnow() + datetime.timedelta(days=365)
     secret = client.set_secret("helloWorldSecretName", "helloWorldSecretValue", expires_on=expires)
     print("Secret with name '{0}' created with value '{1}'".format(secret.name, secret.value))
     print("Secret with name '{0}' expires on '{1}'".format(secret.name, secret.properties.expires_on))
     try:
         bank_secret = client.get_secret(secret.name)
-        print(secret.Value)
-        response = f'secret{str(secret.value)}'
+        print(secret)
+        response = f'secret{str(secret)}'
         return response
         
     except ClientAuthenticationError as ex:
