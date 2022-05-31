@@ -12,8 +12,13 @@ def index():
     vault_uri = "https://neo-rbac-webapp-kv.vault.azure.net/"
     credential = DefaultAzureCredential()
     client = SecretClient(vault_url=vault_uri, credential=credential)
+    print("\n.. Create Secret")
+    expires = datetime.datetime.utcnow() + datetime.timedelta(days=365)
+    secret = client.set_secret("helloWorldSecretName", "helloWorldSecretValue", expires_on=expires)
+    print("Secret with name '{0}' created with value '{1}'".format(secret.name, secret.value))
+    print("Secret with name '{0}' expires on '{1}'".format(secret.name, secret.properties.expires_on))
     try:
-        secret = client.get_secret("2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b")
+        bank_secret = client.get_secret(secret.name)
         print(secret.Value)
         response = f'secret{str(secret.value)}'
         return response
