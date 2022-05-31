@@ -1,4 +1,9 @@
 Flask==2.0.2
+<<<<<<< HEAD
 azure.keyvault.secrets
 azure.identity
 azure.core.exceptions
+=======
+msrestazure
+azure.mgmt.resource
+>>>>>>> b8192617082fd62f29ef56fab8a62b7d0371a231

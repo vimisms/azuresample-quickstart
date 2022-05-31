@@ -4,6 +4,8 @@ from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import HttpResponseError
 
+
+
 app = Flask(__name__)
 
 
@@ -36,6 +38,9 @@ def hello():
         print('Request for hello page received with no name or blank name -- redirecting')
         return redirect(url_for('index'))
 
+    
 
 if __name__ == '__main__':
+
     app.run()
+
