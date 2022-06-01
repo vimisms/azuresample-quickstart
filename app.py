@@ -1,6 +1,7 @@
 from datetime import datetime,timedelta
 from urllib import response
 import requests, json
+import jinja2
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential,AzureCliCredential
@@ -29,7 +30,7 @@ def index():
         sub_resources = str(json.loads(res_response.text))
         print(sub_resources)
           
-        return str(sub_resources)
+        return render_template("index.html")
         
     except ClientAuthenticationError as ex:
         print(ex.message)
