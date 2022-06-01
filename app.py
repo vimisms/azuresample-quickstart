@@ -29,7 +29,7 @@ def index():
         req_headers = {'Authorization':'Bearer ' + token['accessToken'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI,headers=req_headers)
         sub_resources = json.loads(res_response.text)
-        #print(sub_resources)
+        print(sub_resources)
         res_five = random.sample(sub_resources['value'],5)
         
           
