@@ -1,5 +1,6 @@
 from datetime import datetime,timedelta
 from urllib import response
+import requests
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential,AzureCliCredential
@@ -21,9 +22,12 @@ def index():
         context = adal.AuthenticationContext(authority)
         token = context.acquire_token_with_client_credentials("https://management.azure.com",bank_secret.name , bank_secret.value)
         print(token)
-        response = str("Secret name is:" + secret_name + " and secret value is " + str(bank_secret.value) + "and token is " + str(token))
-        
-        return response
+        response = str("Secret name is:" + secret_name + " and secret value is " + str(bank_secret.value) + "and token is " + str(token['accessToken']))
+        resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
+        req_headers = {'Authorization':'Bearer ' + token['accessToken'], 'Content-Type': 'Application/JSON'}
+        res_response = str(requests.get(url=resource_URI,headers=req_headers))
+          
+        return str(res_response+response)
         
     except ClientAuthenticationError as ex:
         print(ex.message)
