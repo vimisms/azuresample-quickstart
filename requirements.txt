@@ -4,6 +4,5 @@ azure.identity
 adal
 requests
 jinja2
-random
 
 
