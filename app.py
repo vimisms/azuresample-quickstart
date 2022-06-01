@@ -26,6 +26,7 @@ def index():
         resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
         req_headers = {'Authorization':'Bearer ' + token['accessToken'], 'Content-Type': 'Application/JSON'}
         res_response = str(requests.get(url=resource_URI,headers=req_headers))
+        print(res_response)
           
         return str(res_response+response)
         
