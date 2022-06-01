@@ -3,5 +3,6 @@ azure.keyvault.secrets
 azure.identity
 adal
 requests
+json
 
 
