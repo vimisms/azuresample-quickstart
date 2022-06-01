@@ -7,6 +7,7 @@ from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential,AzureCliCredential
 from azure.core.exceptions import ClientAuthenticationError
 import adal
+import random
 
 app = Flask(__name__)	
 
@@ -27,10 +28,12 @@ def index():
         resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
         req_headers = {'Authorization':'Bearer ' + token['accessToken'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI,headers=req_headers)
-        sub_resources = str(json.loads(res_response.text))
-        print(sub_resources)
+        sub_resources = json.loads(res_response.text)
+        #print(sub_resources)
+        res_five = random.sample(sub_resources,5)
+        
           
-        return render_template("index.html")
+        return render_template("index.html",res_five=res_five)
         
     except ClientAuthenticationError as ex:
         print(ex.message)
