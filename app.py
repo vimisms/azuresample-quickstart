@@ -30,7 +30,7 @@ def index():
         res_response = requests.get(url=resource_URI,headers=req_headers)
         sub_resources = json.loads(res_response.text)
         #print(sub_resources)
-        res_five = random.sample(sub_resources,5)
+        res_five = random.sample(sub_resources['value'],5)
         
           
         return render_template("index.html",res_five=res_five)
