@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% block head %}
-    <link rel="stylesheet" href="style.css" />
-    <title>{% block title %}{% endblock %} - Azure Subscription Scanner</title>
-    {% endblock %}
-</head>
-<body>
-    <div id="content">{% block type %}
-        <p>{% for key, value in res_type.items() %}
-          <h1> {{key}}</h1>
-          <h2> {{value}}</h2>
-       {% endfor %}</p>
-      {% endblock %}</div>
-      <div id="content">{% block location %}
-        {% for key, value in res_location.items() %}
-            <h1> {{key}}</h1>
-            <h2> {{value}}</h2>
-         {% endfor %}
-      {% endblock %}</div>
-    <div id="footer">
-        {% block footer %}
-        &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+    <head>
+        {% block head %}
+            <link rel="stylesheet" href="style.css" />
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
         {% endblock %}
-    </div>
-</body>
+    </head>
+    <body>
+        <div id="content">
+            {% block type %}
+                <p>
+                    <table>
+                        {% for key, value in res_type.items() %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </p>
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block location %}
+                <p>
+                    <table>
+                        {% for key, value in res_location.items() %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </p>
+            {% endblock %}
+        </div>
+        <div id="footer">
+            {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+        </div>
+    </body>
 </html>
