@@ -28,7 +28,7 @@ authority = (
 context = adal.AuthenticationContext(authority)
 token = context.acquire_token_with_client_credentials(
     "https://management.azure.com", bank_secret.name, bank_secret.value)
-print(token)
+print("Management token is \n" +  str(token))
 
 ###Get token for Graph to get user name from principle ID###
 
@@ -38,9 +38,9 @@ graph_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
 
 graph_req_body= 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
 
-graph_token_res = requests.Request("POST",graph_token_uri,headers=graph_req_headers,data=graph_req_body)
+response = requests.request("POST",graph_token_uri,headers=graph_req_headers,data=graph_req_body)
 
-print("graph token is \n" +  str(graph_token_res.text))
+print("graph token is \n" +  str(response.text))
 
 
 
