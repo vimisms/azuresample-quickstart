@@ -34,9 +34,9 @@ print(token)
 
 graph_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/v2.0/token"
 graph_req_headers = {'Content-Type': 'x-www-form-urlencoded'}
-graph_req_body = {'grant_type':'client_credentials','client_id':'2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b','scope': 'https://graph.microsoft.com/.default','client_secret':str(bank_secret) }
+graph_req_body = 'grant_type=client_credentials&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https://graph.microsoft.com/.default&client_secret=' + str(bank_secret)
 
-graph_token_res = requests.post(url=graph_token_uri,headers=graph_req_headers,json=graph_req_body)
+graph_token_res = requests.post(url=graph_token_uri,headers=graph_req_headers,data=graph_req_body)
 
 print("graph token is \n" +  str(graph_token_res.text))
 
@@ -82,7 +82,7 @@ def index():
     
     finally:
         print("Request succeeded")
-    
+            
     try:
         sub_role_assignment_Uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' +
