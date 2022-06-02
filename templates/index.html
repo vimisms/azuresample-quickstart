@@ -8,10 +8,17 @@
 </head>
 <body>
     <div id="content">{% block type %}
-        <p>{{ res_type }}</p>
+        <p>{% for key, value in res_type.items() %}
+          <h1> {{key}}</h1>
+          <h2> {{value}}</h2>
+       {% endfor %}</p>
       {% endblock %}</div>
       <div id="content">{% block location %}
-        <p>{{ res_location }}</p>
+        {% for key, value in res_location.items() %}
+            <h1> {{key}}</h1>
+            <h2> {{value}}</h2>
+         {% endfor %}
+{% endfor %}
       {% endblock %}</div>
     <div id="footer">
         {% block footer %}
