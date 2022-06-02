@@ -47,6 +47,10 @@ print("graph token is \n" +  str(graph_token_res.text))
 def index():
 
     try:
+        resource_by_type = []
+        resource_by_location = []
+        data_by_type = {}
+        data_by_location = {}
 
         response = str("Secret name is:" + secret_name + " and secret value is " + str(bank_secret.value) + "and token is " + str(token['accessToken']))
         resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
@@ -75,6 +79,9 @@ def index():
     except ClientAuthenticationError as ex:
         print(ex.message)
         return ex.message
+    
+    finally:
+        print("Request succeeded")
     
     try:
         sub_role_assignment_Uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
