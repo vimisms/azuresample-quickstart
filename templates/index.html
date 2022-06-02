@@ -37,6 +37,13 @@
                 </p>
             {% endblock %}
         </div>
+        <div id="content">
+            {% block rbac %}
+                <p>
+                    {{res_rbac}}
+                </p>
+            {% endblock %}
+        </div>
         <div id="footer">
             {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
         </div>

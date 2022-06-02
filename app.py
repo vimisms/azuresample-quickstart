@@ -76,7 +76,7 @@ def index():
 
         print(data_by_type)
         print(data_by_location)
-        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)))
+        
 
     except ClientAuthenticationError as ex:
         print(ex.message)
@@ -92,6 +92,7 @@ def index():
         res_sub_role_assignments = requests.get(url=sub_role_assignment_Uri, headers=req_headers)
         sub_role_assignments = json.loads(res_sub_role_assignments.text)
         print(sub_role_assignments)
+        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(sub_role_assignments)))
         
     except:
         print(ex.message)

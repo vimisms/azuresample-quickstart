@@ -1,1 +1,1 @@
-/subdetails
+requests.request
