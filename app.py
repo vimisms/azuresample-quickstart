@@ -38,7 +38,7 @@ graph_req_body = {'grant_type':'client_credentials','client_id':'2b0ce5a8-0146-4
 
 graph_token_res = requests.post(url=graph_token_uri,headers=graph_req_headers,json=json.dumps(graph_req_body))
 
-print("graph token is \n" +  graph_token_res)
+print("graph token is \n" +  str(graph_token_res))
 
 
 
