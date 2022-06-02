@@ -39,7 +39,7 @@ def index():
             
         print(resource_by_type)
         for x in resource_by_type:
-            sample_data[x] = resource_by_type.count[x]
+            sample_data[x] = resource_by_type.count(x)
             
         print(sample_data)
         return render_template("index.html",res=json.loads(json.dumps(sample_data)))
