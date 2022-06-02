@@ -28,7 +28,7 @@ authority = (
 context = adal.AuthenticationContext(authority)
 token = context.acquire_token_with_client_credentials(
     "https://management.azure.com", bank_secret.name, bank_secret.value)
-print("Management token is \n" +  str(token))
+#print("Management token is \n" +  str(token))
 
 ###Get token for Graph to get user name from principle ID###
 
@@ -40,7 +40,7 @@ graph_req_body= 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW
 
 response = requests.request("POST",graph_token_uri,headers=graph_req_headers,data=graph_req_body)
 
-print("graph token is \n" +  str(response.text))
+#print("graph token is \n" +  str(response.text))
 
 
 
@@ -51,8 +51,11 @@ def index():
     try:
         resource_by_type = []
         resource_by_location = []
+        role_definition_name = []
         data_by_type = {}
         data_by_location = {}
+        role_definition_name = []
+        data_rbac = {}
 
         response = str("Secret name is:" + secret_name + " and secret value is " + str(bank_secret.value) + "and token is " + str(token['accessToken']))
         resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
@@ -60,22 +63,22 @@ def index():
                        token['accessToken'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
-        print(sub_resources)
+        #print(sub_resources)
         #res_five = random.sample(sub_resources['value'],5)
         # return render_template("index.html",res_five=res_five)
         for i in sub_resources['value']:
             resource_by_type.append(i['type'])
             resource_by_location.append(i['location'])
 
-        print(resource_by_type)
+        #print(resource_by_type)
         for x in resource_by_type:
             data_by_type[x] = resource_by_type.count(x)
 
         for x in resource_by_location:
             data_by_location[x] = resource_by_location.count(x)
 
-        print(data_by_type)
-        print(data_by_location)
+        #print(data_by_type)
+        #print(data_by_location)
         
 
     except ClientAuthenticationError as ex:
@@ -91,8 +94,25 @@ def index():
                        token['accessToken'], 'Content-Type': 'Application/JSON'}
         res_sub_role_assignments = requests.get(url=sub_role_assignment_Uri, headers=req_headers)
         sub_role_assignments = json.loads(res_sub_role_assignments.text)
-        print(sub_role_assignments)
-        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(sub_role_assignments)))
+        #print(sub_role_assignments)
+        
+        for items in sub_role_assignments['value']:
+            role_definition_id = items['properties']['roleDefinitionId']
+            role_definition_uri = "https://management.azure.com" + str(role_definition_id) + "?api-version=2015-07-01"
+            res_role_definition =  json.loads((requests.get(url=role_definition_uri,headers=req_headers)).text)
+            role_definition_name.append(res_role_definition['properties']['roleName'])
+            
+        print(role_definition_name)
+        for x in role_definition_name:
+            data_rbac[x] = role_definition_name.count(x)
+        
+            
+        
+        
+        
+        
+        
+        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)))
         
     except:
         print(ex.message)
