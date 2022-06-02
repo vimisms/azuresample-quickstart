@@ -14,6 +14,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     resource_by_type = []
+    sample_data = {}
     vault_uri = "https://neo-rbac-webapp-kv.vault.azure.net/"
     credential = DefaultAzureCredential()
     client = SecretClient(vault_url=vault_uri, credential=credential)
@@ -36,11 +37,11 @@ def index():
         for i in sub_resources['value']:
             resource_by_type.append(i['type'])
             
-        res = {}
-        for i in resource_by_type:
-            res[i] = resource_by_type.count[i]
+        
+        for x in resource_by_type:
+            sample_data[x] = resource_by_type.count[x]
             
-        print(res)
+        print(sample_data)
         return render_template("index.html",res=json.loads(json.dumps(res)))
             
         
