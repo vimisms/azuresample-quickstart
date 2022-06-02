@@ -8,7 +8,10 @@
 </head>
 <body>
     <div id="content">{% block content %}
-        <p>{{ res }}</p>
+        <p>{{ res_type }}</p>
+      {% endblock %}</div>
+      <div id="content">{% block content %}
+        <p>{{ res_location }}</p>
       {% endblock %}</div>
     <div id="footer">
         {% block footer %}
