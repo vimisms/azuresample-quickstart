@@ -37,12 +37,12 @@ def index():
         for i in sub_resources['value']:
             resource_by_type.append(i['type'])
             
-        
+        print(resource_by_type)
         for x in resource_by_type:
             sample_data[x] = resource_by_type.count[x]
             
         print(sample_data)
-        return render_template("index.html",res=json.loads(json.dumps(res)))
+        return render_template("index.html",res=json.loads(json.dumps(sample_data)))
             
         
     except ClientAuthenticationError as ex:
