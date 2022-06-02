@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    resource_by_type = []
     vault_uri = "https://neo-rbac-webapp-kv.vault.azure.net/"
     credential = DefaultAzureCredential()
     client = SecretClient(vault_url=vault_uri, credential=credential)
@@ -30,10 +31,18 @@ def index():
         res_response = requests.get(url=resource_URI,headers=req_headers)
         sub_resources = json.loads(res_response.text)
         print(sub_resources)
-        res_five = random.sample(sub_resources['value'],5)
-        
-          
-        return render_template("index.html",res_five=res_five)
+        #res_five = random.sample(sub_resources['value'],5)
+        #return render_template("index.html",res_five=res_five)
+        for i in sub_resources['value']:
+            resource_by_type.append(i['type'])
+            
+        res = {}
+        for i in resource_by_type:
+            res[i] = resource_by_type.count[i]
+            
+        print(res)
+        return render_template("index.html",res=json.loads(json.dumps(res)))
+            
         
     except ClientAuthenticationError as ex:
         print(ex.message)
