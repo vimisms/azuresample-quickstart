@@ -117,6 +117,12 @@ def index():
     except:
         print(ex.message)
         
+        
+@app.route('/hello')
+def hello():
+    return render_template("hello.html")
+
+        
 
 
 if __name__ == '__main__':
