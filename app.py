@@ -102,7 +102,7 @@ def index():
             res_role_definition =  json.loads((requests.get(url=role_definition_uri,headers=req_headers)).text)
             role_definition_name.append(res_role_definition['properties']['roleName'])
             
-        print(role_definition_name)
+        
         for x in role_definition_name:
             data_rbac[x] = role_definition_name.count(x)
         
@@ -111,7 +111,7 @@ def index():
         
         
         
-        
+        print(data_rbac)
         return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)))
         
     except ClientAuthenticationError as ex:
@@ -135,7 +135,7 @@ def resourcelocation():
         
         
         
-    return render_template("hello.html")
+    return render_template("resourcelocation.html")
 
         
 
