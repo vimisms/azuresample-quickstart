@@ -114,12 +114,27 @@ def index():
         
         return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)))
         
-    except:
+    except ClientAuthenticationError as ex:
         print(ex.message)
         
         
-@app.route('/hello')
-def hello():
+@app.route('/resourcelocation',methods=['GET', 'POST'])
+def resourcelocation():
+    query_data = request.form['location']
+    try:
+        
+        resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$filter=location eq '+ query_data +'api-version=2021-04-01'
+        req_headers = {'Authorization': 'Bearer ' +
+                       token['accessToken'], 'Content-Type': 'Application/JSON'}
+        res_response = requests.get(url=resource_URI, headers=req_headers)
+        sub_resources = json.loads(res_response.text)
+        print(sub_resources)
+        
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+        
+        
     return render_template("hello.html")
 
         

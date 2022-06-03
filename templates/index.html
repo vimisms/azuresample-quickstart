@@ -31,7 +31,11 @@
                             <tr>
                                 <td>{{ key }}</td>
                                 <td>{{ value }}</td>
-                                <td><a href=hello > <button class = greystyle >{{key}}</button></a></td>
+                                <td><form action="/resourcelocation" method="post" role="form">
+                                    <input type="hidden" id="location" name="location" value="{{ key }}">
+                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                </form></td>         
+                               
                             </tr>
                         {% endfor %}
                     </table>
