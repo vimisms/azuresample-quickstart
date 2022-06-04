@@ -95,7 +95,7 @@ def index():
         for x in role_definition_name:
             data_rbac[x] = role_definition_name.count(x)       
         
-        print(data_rbac)
+        #print(data_rbac)
         
         
     except ClientAuthenticationError as ex:
@@ -108,9 +108,11 @@ def index():
         res_sub_recommendations = json.loads(requests.get(url=sub_recommendation_uri, headers=req_headers).text)
         if(len(res_sub_recommendations['value']) == 0):
             recommendations = "Congrats !!! your subscription has no Advisor Recommendations"
+            print(recommendations)
             
         else:
             recommendations = "Oops !!! There are some Advisor Recommendations"
+            print(recommendations)
             
     
     
@@ -122,12 +124,12 @@ def index():
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_policy = json.loads(requests.post(url=sub_policy_state_uri, headers=req_headers).text)
-        print(res_sub_policy)
+        #print(res_sub_policy)
         for items in res_sub_policy['value']:
             if items['complianceState'] == 'NonCompliant':
                 data_sub_policy['policyAssignmentName'] = items['policyAssignmentName']
                 data_sub_policy['policyDefinitionAction'] = items['policyDefinitionAction']
-                data_sub_policy['Resource'] = (items['resourceId']).split("/")[7]
+                data_sub_policy['Resource'] = (items['resourceId']).split("/")[-1]
                 data_sub_policy['policySetDefinitionCategory'] = items['policySetDefinitionCategory']
                 return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)),recommendations=recommendations,policy=data_sub_policy)
         
