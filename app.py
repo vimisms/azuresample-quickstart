@@ -105,13 +105,13 @@ def index():
         sub_recommendation_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_sub_recommendations = requests.get(url=sub_recommendation_uri, headers=req_headers)
+        res_sub_recommendations = json.loads(requests.get(url=sub_recommendation_uri, headers=req_headers).text)
         if(len(res_sub_recommendations['value']) == 0):
             recommendations = "Congrats !!! your subscription has no Advisor Recommendations"
             
         else:
             recommendations = "Oops !!! There are some Advisor Recommendations"
-            return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)),recommendations=recommendations)      
+            
     
     
     except ClientAuthenticationError as ex:
