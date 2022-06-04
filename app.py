@@ -33,9 +33,9 @@ mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018c
 mgmt_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
 mgmt_req_body= 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&resource=https%3A%2F%2Fmanagement.azure.com%2F'
 
-response = requests.request("POST",mgmt_token_uri,headers=mgmt_req_headers,data=mgmt_req_body)
+mgmtresponse = requests.request("POST",mgmt_token_uri,headers=mgmt_req_headers,data=mgmt_req_body)
 
-print("mgmt token is \n" +  str(response.text))
+print("mgmt token is \n" +  str(mgmtresponse.text))
 
 
 ###Get token for Graph to get user name from principle ID###
@@ -46,7 +46,7 @@ graph_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
 
 graph_req_body= 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
 
-response = requests.request("POST",graph_token_uri,headers=graph_req_headers,data=graph_req_body)
+graphresponse = requests.request("POST",graph_token_uri,headers=graph_req_headers,data=graph_req_body)
 
 #print("graph token is \n" +  str(response.text))
 
@@ -65,10 +65,10 @@ def index():
         role_definition_name = []
         data_rbac = {}
 
-        response = str("Secret name is:" + secret_name + " and secret value is " + str(bank_secret.value) + "and token is " + str(token['accessToken']))
+        response = str("Secret name is:" + secret_name + " and secret value is " + str(bank_secret.value) + "and token is " + json.loads(mgmtresponse.text)['access_token'])
         resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
         req_headers = {'Authorization': 'Bearer ' +
-                       json.loads(response.text)['access_token'], 'Content-Type': 'Application/JSON'}
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
         print(sub_resources)
@@ -99,7 +99,7 @@ def index():
     try:
         sub_role_assignment_Uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' +
-                       json.loads(response.text)['access_token'], 'Content-Type': 'Application/JSON'}
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_role_assignments = requests.get(url=sub_role_assignment_Uri, headers=req_headers)
         sub_role_assignments = json.loads(res_sub_role_assignments.text)
         print(sub_role_assignments)
@@ -133,7 +133,7 @@ def resourcelocation():
         
         resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$filter=location eq '"+query_data+"'&api-version=2021-04-01"
         req_headers = {'Authorization': 'Bearer ' +
-                       json.loads(response.text)['access_token'], 'Content-Type': 'Application/JSON'}
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
         print(sub_resources)
