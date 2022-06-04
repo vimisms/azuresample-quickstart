@@ -121,7 +121,7 @@ def index():
         sub_policy_state_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_sub_policy = json.loads(requests.get(url=sub_policy_state_uri, headers=req_headers).text)
+        res_sub_policy = json.loads(requests.post(url=sub_policy_state_uri, headers=req_headers).text)
         print(res_sub_policy)
         for items in res_sub_policy['value']:
             if items['complianceState'] == 'NonCompliant':
