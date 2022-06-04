@@ -122,6 +122,7 @@ def index():
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_policy = json.loads(requests.get(url=sub_policy_state_uri, headers=req_headers).text)
+        print(res_sub_policy)
         for items in res_sub_policy['value']:
             if items['complianceState'] == 'NonCompliant':
                 data_sub_policy['policyAssignmentName'] = items['policyAssignmentName']
