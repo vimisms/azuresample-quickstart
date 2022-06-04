@@ -131,7 +131,7 @@ def index():
                 data_sub_policy['policyDefinitionAction'] = items['policyDefinitionAction']
                 data_sub_policy['Resource'] = (items['resourceId']).split("/")[-1]
                 data_sub_policy['policySetDefinitionCategory'] = items['policySetDefinitionCategory']
-            sub_policy.append(data_sub_policy)
+                sub_policy.append(data_sub_policy)
                 
         
     except ClientAuthenticationError as ex:
