@@ -131,14 +131,14 @@ def index():
                 data_sub_policy['policyDefinitionAction'] = items['policyDefinitionAction']
                 data_sub_policy['Resource'] = (items['resourceId']).split("/")[-1]
                 data_sub_policy['policySetDefinitionCategory'] = items['policySetDefinitionCategory']
-                sub_policy.append(data_sub_policy)
+                sub_policy.append(data_sub_policy.copy())
                 
         
     except ClientAuthenticationError as ex:
         print(ex.message)  
     
     finally:
-        print(data_sub_policy)
+        print(sub_policy)
         return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)),recommendations=recommendations,policy=sub_policy)
         
 @app.route('/resourcelocation',methods=['GET', 'POST'])
