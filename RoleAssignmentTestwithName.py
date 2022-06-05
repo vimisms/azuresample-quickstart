@@ -29,11 +29,13 @@ try:
     resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
     req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
     res_response = json.loads((requests.get(url=resource_URI, headers=req_headers)).text)
+    #print(res_response)
     for items in res_response['value']:
         if items['properties']['roleDefinitionId'] == role_def_id:
             g_uri = "https://graph.microsoft.com/v1.0/directoryObjects/"+items['properties']['principalId']
             g_headers = {'Authorization': 'Bearer ' + json.loads(graphresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             g_res = json.loads((requests.get(url=g_uri,headers=g_headers)).text)
+            g_res['scope'] = items['properties']['scope']
             g_res_list.append(g_res)
 
     print(g_res_list)
