@@ -16,16 +16,7 @@
                     <th>Object Type</th>
                     {% for dict_items in rbac_details %}
                         <tr>
-                            {% if dict_items["@odata.type"]  == "#microsoft.graph.servicePrincipal" %}
-                                <td>Service Principal</td>
-                                <td>{{ dict_items.appDisplayName }}</td>
-                            {% elif dict_items["@odata.type"]== "#microsoft.graph.group" %}
-                                <td>Group</td>
-                                <td>{{ dict_items.displayName }}</td>
-                            {% elif dict_items["@odata.type"]== "#microsoft.graph.user" %}
-                                <td>User</td>
-                                <td>{{ dict_items.displayName }}</td>
-                            {% endif %}
+                            {{dict_items}}
                         </tr>
                     {% endfor %}
                 </table>
