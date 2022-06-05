@@ -182,8 +182,9 @@ def rbac():
             if items['properties']['roleDefinitionId'] == role_def_id:
                 g_uri = "https://graph.microsoft.com/v1.0/directoryObjects/" + items['properties']['principalId']
                 g_headers = {'Authorization': 'Bearer ' + json.loads(graphresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-                g_res = requests.request("GET", g_uri, headers=g_headers)
-                g_res_list.append(g_res.text)
+                #g_res = requests.request("GET", g_uri, headers=g_headers)
+                g_res = json.loads((requests.get(url=g_uri,headers=g_headers)).text)
+                g_res_list.append(g_res)
         print(g_res_list)
         return render_template("rbac.html", rbac_details=g_res_list)
 

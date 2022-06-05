@@ -13,22 +13,22 @@
             <p>
                 <table>
                     <tr>
-                    <th>Object Type</th>
-                    <th>Object Name</th>
+                        <th>Object Type</th>
+                        <th>Object Name</th>
                     </tr>
                     {% for dict_items in rbac_details %}
-                    <tr>
-                        {% if "appId" in dict_items %}
-                            <td>Service Principal</td>
-                            <td>{{ dict_items["displayName"] }}</td>
-                        {% elif "groupTypes" in dict_items %}
-                            <td>Group</td>
-                            <td>{{ dict_items["displayName"] }}</td>
-                        {% elif "givenName" in dict_items %}
-                            <td>User</td>
-                            <td>{{ dict_items["displayName"] }}</td>
-                        {% endif %}
-                    </tr>
+                        <tr>
+                            {% if "appId" in dict_items %}
+                                <td>Service Principal</td>
+                                <td>{{ dict_items["displayName"] }}</td>
+                            {% elif "groupTypes" in dict_items %}
+                                <td>Group</td>
+                                <td>{{ dict_items["displayName"] }}</td>
+                            {% elif "givenName" in dict_items %}
+                                <td>User</td>
+                                <td>{{ dict_items["displayName"] }}</td>
+                            {% endif %}
+                        </tr>
                     {% endfor %}
                 </table>
             </p>
@@ -38,4 +38,3 @@
         </div>
     </body>
 </html>
- 
