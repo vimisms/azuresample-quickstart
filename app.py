@@ -185,12 +185,11 @@ def rbac():
                 g_res = requests.request("GET", g_uri, headers=g_headers)
                 g_res_list.append(g_res.text)
         
-        return render_template("resourcelocation.html", rbac_details=g_res_list)
+        return render_template("rbac.html", rbac_details=g_res_list)
 
     except ClientAuthenticationError as ex:
         print(ex.message)
 
-    return render_template("resourcelocation.html")
 
 
 if __name__ == '__main__':
