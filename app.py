@@ -22,20 +22,20 @@ bank_secret = client.get_secret(secret_name)
 
 mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/token"
 mgmt_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
-mgmt_req_body= 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&resource=https%3A%2F%2Fmanagement.azure.com%2F'
-mgmtresponse = requests.request("POST",mgmt_token_uri,headers=mgmt_req_headers,data=mgmt_req_body)
-print("mgmt token is \n" +  str(mgmtresponse.text))
+mgmt_req_body = 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&resource=https%3A%2F%2Fmanagement.azure.com%2F'
+mgmtresponse = requests.request(
+    "POST", mgmt_token_uri, headers=mgmt_req_headers, data=mgmt_req_body)
+print("mgmt token is \n" + str(mgmtresponse.text))
 
 
 ###Get token for Graph to get user name from principle ID###
 
 graph_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/v2.0/token"
 graph_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
-graph_req_body= 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
-graphresponse = requests.request("POST",graph_token_uri,headers=graph_req_headers,data=graph_req_body)
-print("graph token is \n" +  str(graphresponse.text))
-
-
+graph_req_body = 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FGW8Dg9Esme84ALK9Cm2Pdw2&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
+graphresponse = requests.request(
+    "POST", graph_token_uri, headers=graph_req_headers, data=graph_req_body)
+print("graph token is \n" + str(graphresponse.text))
 
 
 @app.route('/')
@@ -50,7 +50,7 @@ def index():
         data_by_type = {}
         data_by_location = {}
         data_sub_policy = {}
-        
+
         data_rbac = {}
 
         resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
@@ -62,105 +62,135 @@ def index():
             resource_by_type.append(i['type'])
             resource_by_location.append(i['location'])
 
-        
         for x in resource_by_type:
             data_by_type[x] = resource_by_type.count(x)
 
         for x in resource_by_location:
             data_by_location[x] = resource_by_location.count(x)
 
-        print(data_by_type)      
+        print(data_by_type)
 
     except ClientAuthenticationError as ex:
         print(ex.message)
         return ex.message
-    
+
     finally:
         print("Request succeeded")
-            
+
     try:
         sub_role_assignment_Uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_sub_role_assignments = requests.get(url=sub_role_assignment_Uri, headers=req_headers)
+        res_sub_role_assignments = requests.get(
+            url=sub_role_assignment_Uri, headers=req_headers)
         sub_role_assignments = json.loads(res_sub_role_assignments.text)
         print(sub_role_assignments)
-        
+
         for items in sub_role_assignments['value']:
             role_definition_id = items['properties']['roleDefinitionId']
-            role_definition_uri = "https://management.azure.com" + str(role_definition_id) + "?api-version=2015-07-01"
-            res_role_definition =  json.loads((requests.get(url=role_definition_uri,headers=req_headers)).text)
-            role_definition_name.append(res_role_definition['properties']['roleName'])            
-        
+            role_definition_uri = "https://management.azure.com" + \
+                str(role_definition_id) + "?api-version=2015-07-01"
+            res_role_definition = json.loads(
+                (requests.get(url=role_definition_uri, headers=req_headers)).text)
+            role_definition_name.append(
+                res_role_definition['properties']['roleName'])
+
         for x in role_definition_name:
-            data_rbac[x] = role_definition_name.count(x)       
-        
-        #print(data_rbac)
-        
-        
+            data_rbac[x] = role_definition_name.count(x)
+
+        # print(data_rbac)
+
     except ClientAuthenticationError as ex:
         print(ex.message)
-    
+
     try:
         sub_recommendation_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_sub_recommendations = json.loads(requests.get(url=sub_recommendation_uri, headers=req_headers).text)
+        res_sub_recommendations = json.loads(requests.get(
+            url=sub_recommendation_uri, headers=req_headers).text)
         if(len(res_sub_recommendations['value']) == 0):
             recommendations = "Congrats !!! your subscription has no Advisor Recommendations"
             print(recommendations)
-            
+
         else:
             recommendations = "Oops !!! There are some Advisor Recommendations"
             print(recommendations)
-            
-    
-    
+
     except ClientAuthenticationError as ex:
         print(ex.message)
-        
+
     try:
         sub_policy_state_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_sub_policy = json.loads(requests.post(url=sub_policy_state_uri, headers=req_headers).text)
-        #print(res_sub_policy)
+        res_sub_policy = json.loads(requests.post(
+            url=sub_policy_state_uri, headers=req_headers).text)
+        # print(res_sub_policy)
         for items in res_sub_policy['value']:
             if items['complianceState'] == 'NonCompliant':
                 data_sub_policy['policyAssignmentName'] = items['policyAssignmentName']
                 data_sub_policy['policyDefinitionAction'] = items['policyDefinitionAction']
-                data_sub_policy['Resource'] = (items['resourceId']).split("/")[-1]
+                data_sub_policy['Resource'] = (
+                    items['resourceId']).split("/")[-1]
                 data_sub_policy['policySetDefinitionCategory'] = items['policySetDefinitionCategory']
                 sub_policy.append(data_sub_policy.copy())
-                
-        
+
     except ClientAuthenticationError as ex:
-        print(ex.message)  
-    
+        print(ex.message)
+
     finally:
         print(sub_policy)
-        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)),res_rbac=json.loads(json.dumps(data_rbac)),recommendations=recommendations,policy=sub_policy)
-        
-@app.route('/resourcelocation',methods=['GET', 'POST'])
+        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy)
+
+
+@app.route('/resourcelocation', methods=['GET', 'POST'])
 def resourcelocation():
     query_data = request.form['location']
     try:
-        
-        resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$filter=location eq '"+query_data+"'&api-version=2021-04-01"
+
+        resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$filter=location eq '" + \
+            query_data+"'&api-version=2021-04-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
         print(sub_resources)
-        
+
     except ClientAuthenticationError as ex:
         print(ex.message)
-        
-        
-        
+
     return render_template("resourcelocation.html")
 
+
+@app.route('/rbac', methods=['GET', 'POST'])
+def rbac():
+    query_data = request.form['rbactype']
+    try:
+        g_res_list = []
+        role_definition_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleDefinitions?api-version=2015-07-01"
+        req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_role_definition = json.loads((requests.get(url=role_definition_uri, headers=req_headers)).text)
+        for items in res_role_definition['value']:
+            if items['properties']['roleName'] == query_data:
+                role_def_id = items['id']
+
+        r_assignment_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
+        req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        r_assignment_res = json.loads((requests.get(url=r_assignment_uri, headers=req_headers)).text)
+        for items in r_assignment_res['value']:
+            if items['properties']['roleDefinitionId'] == role_def_id:
+                g_uri = "https://graph.microsoft.com/v1.0/directoryObjects/" + items['properties']['principalId']
+                g_headers = {'Authorization': 'Bearer ' + json.loads(graphresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+                g_res = requests.request("GET", g_uri, headers=g_headers)
+                g_res_list.append(g_res.text)
         
+        return render_template("resourcelocation.html", rbac_details=g_res_list)
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+
+    return render_template("resourcelocation.html")
 
 
 if __name__ == '__main__':

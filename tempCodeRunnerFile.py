@@ -1,1 +1,1 @@
-requests.request
+g_res_list.append(g_res.text)

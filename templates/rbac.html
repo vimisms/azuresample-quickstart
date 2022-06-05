@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        {% block head %}
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id = "rbac_details">
+            <p>
+                <table>
+                    <th>Object Name</th>
+                    <th>Object Type</th>
+                    {% for dict_items in rbac_details %}
+                        <tr>
+                            {% if dict_items."@odata.type"  == "#microsoft.graph.servicePrincipal" %}
+                                <td>Service Principal</td>
+                                <td>{{ dict_items.appDisplayName }}</td>
+                            {% elif dict_items."@odata.type"== "#microsoft.graph.group" %}
+                                <td>Group</td>
+                                <td>{{ dict_items.displayName }}</td>
+                            {% elif dict_items."@odata.type"== "#microsoft.graph.user" %}
+                                <td>User</td>
+                                <td>{{ dict_items.displayName }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </p>
+        </div>
+        <div id="footer">
+            {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+        </div>
+    </body>
+</html>

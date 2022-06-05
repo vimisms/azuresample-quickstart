@@ -47,7 +47,19 @@
         <div id="content">
             {% block rbac %}
                 <p>
-                    {{res_rbac}}
+                    <table>
+                        {% for key, value in res_rbac.items() %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                                <td><form action="/rbac" method="post" role="form">
+                                    <input type="hidden" id="rbactype" name="rbactype" value="{{ key }}">
+                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                </form></td>         
+                               
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </p>
             {% endblock %}
         </div>
