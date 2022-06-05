@@ -184,7 +184,7 @@ def rbac():
                 g_headers = {'Authorization': 'Bearer ' + json.loads(graphresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
                 g_res = requests.request("GET", g_uri, headers=g_headers)
                 g_res_list.append(g_res.text)
-        
+        print(g_res_list)
         return render_template("rbac.html", rbac_details=g_res_list)
 
     except ClientAuthenticationError as ex:
