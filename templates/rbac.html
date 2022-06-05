@@ -22,15 +22,15 @@
                             {% if "appId" in dict_items %}
                                 <td>Service Principal</td>
                                 <td>{{ dict_items["displayName"] }}</td>
-                                <td>{{ dict_items["Scope"] }}</td>
+                                <td>{{ dict_items["scope"] }}</td>
                             {% elif "groupTypes" in dict_items %}
                                 <td>Group</td>
                                 <td>{{ dict_items["displayName"] }}</td>
-                                <td>{{ dict_items["Scope"] }}</td>
+                                <td>{{ dict_items["scope"] }}</td>
                             {% elif "givenName" in dict_items %}
                                 <td>User</td>
                                 <td>{{ dict_items["displayName"] }}</td>
-                                <td>{{ dict_items["Scope"] }}</td>
+                                <td>{{ dict_items["scope"] }}</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
