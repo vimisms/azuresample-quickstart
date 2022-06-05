@@ -12,7 +12,9 @@
         <div id="content">
             {% block type %}
                 <p>
-                    <table>
+                    <table id = "data">
+                        <th>Resource Type</th>
+                        <th> Count </th>
                         {% for key, value in res_type.items() %}
                             <tr>
                                 <td>{{ key }}</td>
