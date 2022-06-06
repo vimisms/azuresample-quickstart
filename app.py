@@ -163,7 +163,7 @@ def resourcelocation():
     return render_template("resourcelocation.html")
 
 
-@app.route('/rbac/<rbactype>', methods=['GET', 'POST'])
+@app.route('/rbac', methods=['GET', 'POST'])
 def rbac():
     query_data = request.form['rbactype']
     try:
