@@ -1,17 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         {% block head %}
-            <link rel="stylesheet" href="style.css" />
             <title>
                 {% block title %}{% endblock %}
             - Azure Subscription Scanner</title>
         {% endblock %}
     </head>
     <body>
-        <div id="hello">
-            <p>I am in hello page</p>
-            
+        <div id = "rbac_details">
+            <p>
+                <table>
+                    <tr>
+                        <th>Resource Name</th>
+                        <th>Resource SKU Name</th>
+                        <th>Resource Tier</th>
+                        <th>Resource Kind</th>
+                        <th>Resource Location</th>
+                        <th>Resource Tags</th>
+                    </tr>
+                    {% for items in resource_type %}
+                        <tr>
+                            <td>{{items['name']}}</td>
+                            <td>{{items['skuname']}}</td>
+                            <td>{{items['tier']}}</td>
+                            <td>{{items['kind']}}</td>
+                            <td>{{items['location']}}</td>
+                            <td>{{items['tags']}}</td>
+                            
+                        </tr>
+                    {% endfor %}
+                </table>
+            </p>
+        </div>
+        <div id="footer">
+            {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
         </div>
     </body>
 </html>

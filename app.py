@@ -183,7 +183,8 @@ def resourcetype():
                 res_type_json['location'] = items['location']
                 res_type_json['tags'] = items['tags']
                 res_type.append(res_type_json)
-        print(res_type)          
+        print(res_type)
+        return render_template("resourcetype.html", resource_type=res_type)      
                 
                 
         
