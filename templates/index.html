@@ -12,7 +12,7 @@
         <div id="content">
             {% block type %}
                 <p>
-                    <table id = "rtypedata">
+                    <table class = "table-data">
                         <th>Resource Type</th>
                         <th> Count </th>
                         {% for key, value in res_type.items() %}
@@ -32,7 +32,7 @@
         <div id="content">
             {% block location %}
                 <p>
-                    <table>
+                    <table class = "table-data">
                         {% for key, value in res_location.items() %}
                             <tr>
                                 <td>{{ key }}</td>
@@ -51,7 +51,7 @@
         <div id="content">
             {% block rbac %}
                 <p>
-                    <table>
+                    <table class = "table-data">
                         {% for key, value in res_rbac.items() %}
                             <tr>
                                 <td>{{ key }}</td>
@@ -77,7 +77,7 @@
         <div id="content">
             {% block policy %}
                 <p>
-                    <table>
+                    <table class = "table-data">
                         <th>Policy Assignment Name</th>
                         <th> policyDefinitionAction </th>
                         <th> Resource </th>
