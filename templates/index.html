@@ -12,7 +12,7 @@
         <div id="content">
             {% block type %}
                 <p>
-                    <table id = "data">
+                    <table id = "rtypedata">
                         <th>Resource Type</th>
                         <th> Count </th>
                         {% for key, value in res_type.items() %}
@@ -77,7 +77,24 @@
         <div id="content">
             {% block policy %}
                 <p>
-                    {{policy}}
+                    <table>
+                        <th>Policy Assignment Name</th>
+                        <th> policyDefinitionAction </th>
+                        <th> Resource </th>
+                        <th> policySet Definition Category </th>
+                        
+                        {% for items in policy[:5] %}
+                            <tr>
+                                <td>{{ items['policyAssignmentName'] }}</td>
+                                <td>{{ items['policyDefinitionAction'] }}</td>
+                                <td>{{ items['Resource'] }}</td>
+                                <td>{{ items['policySetDefinitionCategory'] }}</td>
+                                         
+                               
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    
                 </p>
             {% endblock %}
         </div>

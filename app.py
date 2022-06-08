@@ -179,8 +179,6 @@ def resourcetype():
             res_type_json['type'] = items['type']            
             res_type_json['kind'] = items['kind']
             res_type_json['location'] = items['location']
-            res_type_json['skuname'] = items['sku']['name']
-            res_type_json['tier'] = items['sku']['tier']
             res_type.append(res_type_json)
         print(res_type)
         return render_template("resourcetype.html", resource_type=res_type)      
