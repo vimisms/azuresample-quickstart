@@ -162,6 +162,38 @@ def resourcelocation():
 
     return render_template("resourcelocation.html")
 
+@app.route('/resourcetype', methods=['GET', 'POST'])
+def resourcelocation():
+    query_data = request.form['resourcetype']
+    try:
+        res_type = []
+        res_type_json = {}
+        resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$resourceType=location eq '" + \
+            query_data+"'&api-version=2021-04-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_response = requests.get(url=resource_URI, headers=req_headers)
+        sub_resources = json.loads(res_response.text)
+        for items in sub_resources['value']:
+            if items['type'] == "Microsoft.Storage/storageAccounts":
+                res_type_json['name'] = items['name']
+                res_type_json['skuname'] = items['sku']['name']
+                res_type_json['tier'] = items['sku']['tier']
+                res_type_json['kind'] = items['kind']
+                res_type_json['location'] = items['location']
+                res_type_json['tags'] = items['tags']
+                res_type.append(res_type_json)
+        print(res_type)
+                
+                
+                
+        
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+
+    return render_template("resourcelocation.html")
+
 
 @app.route('/rbac', methods=['GET', 'POST'])
 def rbac():

@@ -19,6 +19,10 @@
                             <tr>
                                 <td>{{ key }}</td>
                                 <td>{{ value }}</td>
+                                <td><form action="/resourcetype" method="post" role="form">
+                                    <input type="hidden" id="resourcetype" name="resourcetype" value="{{ key }}">
+                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                </form></td> 
                             </tr>
                         {% endfor %}
                     </table>
