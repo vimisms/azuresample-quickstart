@@ -163,7 +163,7 @@ def resourcelocation():
     return render_template("resourcelocation.html")
 
 @app.route('/resourcetype', methods=['GET', 'POST'])
-def resourcelocation():
+def resourcetype():
     query_data = request.form['resourcetype']
     try:
         res_type = []
@@ -183,8 +183,7 @@ def resourcelocation():
                 res_type_json['location'] = items['location']
                 res_type_json['tags'] = items['tags']
                 res_type.append(res_type_json)
-        print(res_type)
-                
+        print(res_type)          
                 
                 
         
