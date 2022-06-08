@@ -175,14 +175,14 @@ def resourcetype():
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
         for items in sub_resources['value']:
-            if items['type'] == "Microsoft.Storage/storageAccounts":
-                res_type_json['name'] = items['name']
-                res_type_json['skuname'] = items['sku']['name']
-                res_type_json['tier'] = items['sku']['tier']
-                res_type_json['kind'] = items['kind']
-                res_type_json['location'] = items['location']
-                res_type_json['tags'] = items['tags']
-                res_type.append(res_type_json)
+            res_type_json['name'] = items['name']  
+            res_type_json['type'] = items['type']            
+            res_type_json['kind'] = items['kind']
+            res_type_json['location'] = items['location']
+            res_type_json['tags'] = items['tags']
+            res_type_json['skuname'] = items['sku']['name']
+            res_type_json['tier'] = items['sku']['tier']
+            res_type.append(res_type_json)
         print(res_type)
         return render_template("resourcetype.html", resource_type=res_type)      
                 
