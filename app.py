@@ -18,7 +18,7 @@ credential = DefaultAzureCredential()
 client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
-print("client secret is /n" + str(bank_secret.value))
+print("client secret is " + str(bank_secret.value))
 
 ###Get token for resource manager API###
 
