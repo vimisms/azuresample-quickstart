@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from urllib import response
 import os
 import requests
@@ -19,7 +19,7 @@ client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
 print("client secret is " + str(bank_secret.value))
-
+timeStamp = date.today()-timedelta(30)
 ###Get token for resource manager API###
 
 mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/token"
@@ -143,9 +143,26 @@ def index():
     except ClientAuthenticationError as ex:
         print(ex.message)
 
+    
+    try:
+        sub_activity_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge" + str(timeStamp)
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sub_activity = json.loads(requests.get(
+            url=sub_activity_uri, headers=req_headers).text)
+        if(len(res_sub_activity['value']) == 0):
+            activity_logs = res_sub_activity['value']           
+
+        else:
+            activity_logs = "Oops !!! There are some Advisor Recommendations"
+            print(activity_logs)
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
     finally:
-        print(sub_policy)
-        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy)
+        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy,activity_logs = activity_logs)
+    
 
 
 @app.route('/resourcelocation', methods=['GET', 'POST'])

@@ -1,0 +1,5 @@
+from datetime import date, timedelta
+today_date = date.today()
+td = timedelta(30)
+newtime = today_date -td
+print(type(newtime))
