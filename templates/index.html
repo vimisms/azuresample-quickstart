@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-        {% block head %}            
+        {% block head %}
             <title>
                 {% block title %}{% endblock %}
             - Azure Subscription Scanner</title>
@@ -11,22 +11,28 @@
     <body>
         <div id="content">
             {% block type %}
-                <p>
                     <table class = "table-data">
-                        <th>Resource Type</th>
-                        <th> Count </th>
-                        {% for key, value in res_type.items() %}
+                        <thead>
                             <tr>
-                                <td class = "key-data">{{ key }}</td>
-                                <td>{{ value }}</td>
-                                <td><form action="/resourcetype" method="post" role="form">
-                                    <input type="hidden" id="resourcetype" name="resourcetype" value="{{ key }}">
-                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
-                                </form></td> 
+                                <th>Resource Type</th>
+                                <th>Count</th>
                             </tr>
-                        {% endfor %}
+                        </thead>
+                        <tbody>
+                            {% for key, value in res_type.items() %}
+                                <tr>
+                                    <td class = "key-data">{{ key }}</td>
+                                    <td>{{ value }}</td>
+                                    <td>
+                                        <form action="/resourcetype" method="post" role="form">
+                                            <input type="hidden" id="resourcetype" name="resourcetype" value="{{ key }}">
+                                            <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
-                </p>
             {% endblock %}
         </div>
         <div id="content">
@@ -37,11 +43,12 @@
                             <tr>
                                 <td>{{ key }}</td>
                                 <td>{{ value }}</td>
-                                <td><form action="/resourcelocation" method="post" role="form">
-                                    <input type="hidden" id="location" name="location" value="{{ key }}">
-                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
-                                </form></td>         
-                               
+                                <td>
+                                    <form action="/resourcelocation" method="post" role="form">
+                                        <input type="hidden" id="location" name="location" value="{{ key }}">
+                                        <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -56,11 +63,12 @@
                             <tr>
                                 <td>{{ key }}</td>
                                 <td>{{ value }}</td>
-                                <td><form action="/rbac" method="post" role="form">
-                                    <input type="hidden" id="rbactype" name="rbactype" value="{{ key }}">
-                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
-                                </form></td>         
-                               
+                                <td>
+                                    <form action="/rbac" method="post" role="form">
+                                        <input type="hidden" id="rbactype" name="rbactype" value="{{ key }}">
+                                        <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -68,33 +76,25 @@
             {% endblock %}
         </div>
         <div id="content">
-            {% block recommendations %}
-                <p>
-                    {{recommendations}}
-                </p>
-            {% endblock %}
+            {% block recommendations %}<p>{{ recommendations }}</p>{% endblock %}
         </div>
         <div id="content">
             {% block policy %}
                 <p>
                     <table class = "table-data">
                         <th>Policy Assignment Name</th>
-                        <th> policyDefinitionAction </th>
-                        <th> Resource </th>
-                        <th> policySet Definition Category </th>
-                        
+                        <th>policyDefinitionAction</th>
+                        <th>Resource</th>
+                        <th>policySet Definition Category</th>
                         {% for items in policy[:5] %}
                             <tr>
                                 <td>{{ items['policyAssignmentName'] }}</td>
                                 <td>{{ items['policyDefinitionAction'] }}</td>
                                 <td>{{ items['Resource'] }}</td>
                                 <td>{{ items['policySetDefinitionCategory'] }}</td>
-                                         
-                               
                             </tr>
                         {% endfor %}
                     </table>
-                    
                 </p>
             {% endblock %}
         </div>
