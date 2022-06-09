@@ -6,7 +6,11 @@ body {
 .locationandtype {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
+}
+
+.table-data {
+    flex-grow: 1;
 }
 
 table {
