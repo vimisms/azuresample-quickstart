@@ -151,11 +151,11 @@ def index():
         res_sub_activity = json.loads(requests.get(
             url=sub_activity_uri, headers=req_headers).text)
         if(len(res_sub_activity['value']) == 0):
-            activity_logs = res_sub_activity['value']           
+            activity_logs = res_sub_activity       
 
         else:
             activity_logs = "Oops !!! There are some Advisor Recommendations"
-            print(activity_logs)
+            
 
     except ClientAuthenticationError as ex:
         print(ex.message)
