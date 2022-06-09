@@ -1,6 +1,6 @@
 body {
     background-color: whitesmoke;
-    font-family: Garamond, serif;
+    font-family: sans-serif;
     position: relative;
 }
 
@@ -9,8 +9,9 @@ table {
     background-color: yellowgreen;
     margin-top: 20px;
     border-collapse: collapse;
-    font-size: 15px;
+    font-size: 10px;
     display: inline;
+    float: left;
 }
 
 th,
