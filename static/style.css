@@ -1,6 +1,7 @@
 body {
     background-color: whitesmoke;
     font-family: Garamond, serif;
+    position: relative;
 }
 
 table {
