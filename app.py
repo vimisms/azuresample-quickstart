@@ -55,7 +55,7 @@ def index():
 
         data_rbac = {}
 
-        resource_URI = 'https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?api-version=2021-04-01'
+        resource_URI = 'https://management.azure.com/subscriptions/'+str(os.environ['AZURE_SUBS_ID'])+'/resources?api-version=2021-04-01'
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -80,7 +80,7 @@ def index():
         print("Request succeeded")
 
     try:
-        sub_role_assignment_Uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
+        sub_role_assignment_Uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_role_assignments = requests.get(
@@ -106,7 +106,7 @@ def index():
         print(ex.message)
 
     try:
-        sub_recommendation_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
+        sub_recommendation_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_recommendations = json.loads(requests.get(
@@ -123,7 +123,7 @@ def index():
         print(ex.message)
 
     try:
-        sub_policy_state_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
+        sub_policy_state_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_policy = json.loads(requests.post(
@@ -151,7 +151,7 @@ def resourcelocation():
     query_data = request.form['location']
     try:
 
-        resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$filter=location eq '" + \
+        resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/resources?$filter=location eq '" + \
             query_data+"'&api-version=2021-04-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
@@ -170,7 +170,7 @@ def resourcetype():
     try:
         res_type = []
         res_type_json = {}
-        resource_URI = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/resources?$resourceType=location eq '" + \
+        resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/resources?$resourceType=location eq '" + \
             query_data+"'&api-version=2021-04-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
@@ -199,14 +199,14 @@ def rbac():
     query_data = request.form['rbactype']
     try:
         g_res_list = []
-        role_definition_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleDefinitions?api-version=2015-07-01"
+        role_definition_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Authorization/roleDefinitions?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_role_definition = json.loads((requests.get(url=role_definition_uri, headers=req_headers)).text)
         for items in res_role_definition['value']:
             if items['properties']['roleName'] == query_data:
                 role_def_id = items['id']
 
-        r_assignment_uri = "https://management.azure.com/subscriptions/6e268af1-b2a7-44a7-9a1a-9025889dbe5d/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
+        r_assignment_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         r_assignment_res = json.loads((requests.get(url=r_assignment_uri, headers=req_headers)).text)
         for items in r_assignment_res['value']:
