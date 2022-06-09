@@ -1,12 +1,12 @@
 body {
     background-color: whitesmoke;
     font-family: sans-serif;
-    position: relative;
 }
 
-#locationandtype {
-    float: left;
-    display: inline;
+.locationandtype {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 table {
@@ -41,14 +41,4 @@ tbody tr:nth-child(even) {
 * {
     margin: 0;
     padding: 0;
-}
-
-.table-data {
-    font-family: sans-serif;
-    text-align: center;
-    table-layout: auto;
-}
-
-.key-data {
-    text-align: left;
 }
