@@ -115,6 +115,64 @@
                 </table>
             {% endblock %}
         </div>
+        <div class="activitylog">
+            <table class = "table-data">
+                <thead>
+                    <tr>
+                        <th>Activity Type</th>
+                        <th>Caller</th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            Resource ID
+                        </th>
+                        <th>
+                            Resource Type
+                        </th>
+                        <th>
+                            Operation
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Event Time Stamp
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in activity_logs[:10] %}
+                        <tr>
+                            <td>
+                                {{ items['authorization']['action'] }}
+                            </td>
+                            <td>
+                                {{ items['caller'] }}
+                            </td>
+                            <td>
+                                {{ items['category']['localizedValue'] }}
+                            </td>
+                            <td>
+                                {{ items['resourceId'] }}
+                            </td>
+                            <td>
+                                {{ items['resourceType']['localizedValue'] }}
+                            </td>
+                            <td>
+                                {{ items['operationName']['localizedValue'] }}
+                            </td>
+                            <td>
+                                {{ items['status']['localizedValue'] }}
+                            </td>
+                            <td>
+                                {{ items['eventTimestamp'] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <div id="footer">
             {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
         </div>
