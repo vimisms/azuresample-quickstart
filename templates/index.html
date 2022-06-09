@@ -17,7 +17,7 @@
                         <th> Count </th>
                         {% for key, value in res_type.items() %}
                             <tr>
-                                <td>{{ key }}</td>
+                                <td class = "key-data">{{ key }}</td>
                                 <td>{{ value }}</td>
                                 <td><form action="/resourcetype" method="post" role="form">
                                     <input type="hidden" id="resourcetype" name="resourcetype" value="{{ key }}">
