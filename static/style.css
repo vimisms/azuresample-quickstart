@@ -9,11 +9,7 @@ table {
     margin-top: 20px;
     border-collapse: collapse;
     font-size: 15px;
-}
-
-#location-data {
-    margin-left: 490px;
-    margin-top: 50px;
+    display: inline;
 }
 
 th,
