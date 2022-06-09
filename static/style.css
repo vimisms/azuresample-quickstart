@@ -1,21 +1,20 @@
 body {
     background-color: whitesmoke;
     font-family: Garamond, serif;
-    font-size: 16px;
 }
 
 table {
-    width: 600px;
+    width: 300px;
     background-color: yellowgreen;
-    margin-top: 100px;
+    margin-top: 50px;
     border-collapse: collapse;
-    font-size: 20px;
+    font-size: 8px;
 }
 
 th,
 td {
-    border: 1px solid rgb(0, 162, 255);
-    padding: 20 50;
+    border: 1px solid rgb(206, 239, 255);
+    padding: 50;
     text-align: left;
 }
 
@@ -26,7 +25,7 @@ thead th {
 }
 
 tbody tr:nth-child(odd) {
-    background-color: rgb(206, 239, 255)
+    background-color: rgb(206, 239, 255);
 }
 
 tbody tr:nth-child(even) {
