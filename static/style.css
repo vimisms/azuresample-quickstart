@@ -3,21 +3,17 @@ body {
     font-family: Garamond, serif;
 }
 
-#typecontent {
-    width: 300px;
-}
-
-#locationcontent {
-    width: 200px;
-    margin-left: 310px;
-}
-
 table {
     width: 300px;
     background-color: yellowgreen;
-    margin-top: 50px;
+    margin-top: 20px;
     border-collapse: collapse;
     font-size: 15px;
+}
+
+#location-data {
+    margin-left: 490px;
+    margin-top: 50px;
 }
 
 th,
@@ -54,8 +50,4 @@ tbody tr:nth-child(even) {
 
 .key-data {
     text-align: left;
-}
-
-table {
-    table-layout: auto;
 }

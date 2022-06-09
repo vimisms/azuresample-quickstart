@@ -9,52 +9,48 @@
         {% endblock %}
     </head>
     <body>
-        <div id="typecontent">
-            {% block type %}
-                    <table class = "table-data">
-                        <thead>
-                            <tr>
-                                <th>Resource Type</th>
-                                <th>Count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for key, value in res_type.items() %}
-                                <tr>
-                                    <td class = "key-data">{{ key }}</td>
-                                    <td>{{ value }}</td>
-                                    <td>
-                                        <form action="/resourcetype" method="post" role="form">
-                                            <input type="hidden" id="resourcetype" name="resourcetype" value="{{ key }}">
-                                            <input type="submit" name="submit" value="View Details" class="btn btn-info">
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-            {% endblock %}
-        </div>
-        <div id="locationcontent">
-            {% block location %}
-                <p>
-                    <table class = "table-data">
-                        {% for key, value in res_location.items() %}
-                            <tr>
-                                <td>{{ key }}</td>
-                                <td>{{ value }}</td>
-                                <td>
-                                    <form action="/resourcelocation" method="post" role="form">
-                                        <input type="hidden" id="location" name="location" value="{{ key }}">
-                                        <input type="submit" name="submit" value="View Details" class="btn btn-info">
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </p>
-            {% endblock %}
-        </div>
+        {% block type %}
+            <table class = "table-data">
+                <thead>
+                    <tr>
+                        <th>Resource Type</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in res_type.items() %}
+                        <tr>
+                            <td class = "key-data">{{ key }}</td>
+                            <td>{{ value }}</td>
+                            <td>
+                                <form action="/resourcetype" method="post" role="form">
+                                    <input type="hidden" id="resourcetype" name="resourcetype" value="{{ key }}">
+                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endblock %}
+        {% block location %}
+            <p>
+                <table class = "table-data" id="location-data">
+                    {% for key, value in res_location.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                            <td>
+                                <form action="/resourcelocation" method="post" role="form">
+                                    <input type="hidden" id="location" name="location" value="{{ key }}">
+                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </p>
+        {% endblock %}
         <div id="content">
             {% block rbac %}
                 <p>
