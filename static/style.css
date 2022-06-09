@@ -4,14 +4,17 @@ body {
     position: relative;
 }
 
+#locationandtype {
+    float: left;
+    display: inline;
+}
+
 table {
     width: 300px;
     background-color: yellowgreen;
     margin-top: 20px;
     border-collapse: collapse;
     font-size: 10px;
-    display: inline;
-    float: left;
 }
 
 th,
