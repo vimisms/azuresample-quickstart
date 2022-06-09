@@ -16,6 +16,7 @@
                         <tr>
                             <th>Resource Type</th>
                             <th>Count</th>
+                            <th>See Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,25 +37,41 @@
             {% endblock %}
             {% block location %}
                 <table class = "table-data" id="location-data">
-                    {% for key, value in res_location.items() %}
+                    <thead>
                         <tr>
-                            <td>{{ key }}</td>
-                            <td>{{ value }}</td>
-                            <td>
-                                <form action="/resourcelocation" method="post" role="form">
-                                    <input type="hidden" id="location" name="location" value="{{ key }}">
-                                    <input type="submit" name="submit" value="View Details" class="btn btn-info">
-                                </form>
-                            </td>
+                            <th>Resource Location</th>
+                            <th>Count</th>
+                            <th>See Details</th>
                         </tr>
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for key, value in res_location.items() %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                                <td>
+                                    <form action="/resourcelocation" method="post" role="form">
+                                        <input type="hidden" id="location" name="location" value="{{ key }}">
+                                        <input type="submit" name="submit" value="View Details" class="btn btn-info">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             {% endblock %}
         </div>
         <div id="content">
             {% block rbac %}
-                <p>
-                    <table class = "table-data">
+                <table class = "table-data">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Count</th>
+                            <th>See Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for key, value in res_rbac.items() %}
                             <tr>
                                 <td>{{ key }}</td>
@@ -67,8 +84,8 @@
                                 </td>
                             </tr>
                         {% endfor %}
-                    </table>
-                </p>
+                    </tbody>
+                </table>
             {% endblock %}
         </div>
         <div id="content">
@@ -76,12 +93,16 @@
         </div>
         <div id="content">
             {% block policy %}
-                <p>
-                    <table class = "table-data">
-                        <th>Policy Assignment Name</th>
-                        <th>policyDefinitionAction</th>
-                        <th>Resource</th>
-                        <th>policySet Definition Category</th>
+                <thead>
+                    <tr>
+                        <table class = "table-data">
+                            <th>Policy Assignment Name</th>
+                            <th>policyDefinitionAction</th>
+                            <th>Resource</th>
+                            <th>policySet Definition Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for items in policy[:5] %}
                             <tr>
                                 <td>{{ items['policyAssignmentName'] }}</td>
@@ -90,8 +111,8 @@
                                 <td>{{ items['policySetDefinitionCategory'] }}</td>
                             </tr>
                         {% endfor %}
-                    </table>
-                </p>
+                    </tbody>
+                </table>
             {% endblock %}
         </div>
         <div id="footer">
