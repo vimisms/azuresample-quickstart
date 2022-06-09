@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from urllib import response
+import os
 import requests
 import json
 import jinja2
@@ -36,6 +37,7 @@ graph_req_body = 'grant_type=client_credentials&client_secret=2fG8Q~LNHsgveTV1FG
 graphresponse = requests.request(
     "POST", graph_token_uri, headers=graph_req_headers, data=graph_req_body)
 print("graph token is \n" + str(graphresponse.text))
+print("Subscription ID is:\n" + str(os.environ['AZURE_SUBS_ID']))
 
 
 @app.route('/')
@@ -68,7 +70,7 @@ def index():
         for x in resource_by_location:
             data_by_location[x] = resource_by_location.count(x)
 
-        print(data_by_type)
+        
 
     except ClientAuthenticationError as ex:
         print(ex.message)
@@ -84,7 +86,7 @@ def index():
         res_sub_role_assignments = requests.get(
             url=sub_role_assignment_Uri, headers=req_headers)
         sub_role_assignments = json.loads(res_sub_role_assignments.text)
-        print(sub_role_assignments)
+        
 
         for items in sub_role_assignments['value']:
             role_definition_id = items['properties']['roleDefinitionId']
@@ -155,7 +157,7 @@ def resourcelocation():
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
-        print(sub_resources)
+        
 
     except ClientAuthenticationError as ex:
         print(ex.message)
@@ -180,7 +182,7 @@ def resourcetype():
             res_type_json['kind'] = items['kind']
             res_type_json['location'] = items['location']
             res_type.append(res_type_json)
-        print(res_type)
+        
         return render_template("resourcetype.html", resource_type=res_type)      
                 
                 
@@ -215,7 +217,7 @@ def rbac():
                 g_res = json.loads((requests.get(url=g_uri,headers=g_headers)).text)
                 g_res['scope'] = items['properties']['scope']
                 g_res_list.append(g_res)
-        print(g_res_list)
+        
         return render_template("rbac.html", rbac_details=g_res_list)
 
     except ClientAuthenticationError as ex:
