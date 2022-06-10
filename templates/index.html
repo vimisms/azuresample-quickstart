@@ -36,7 +36,7 @@
                 </table>
             {% endblock %}
             {% block location %}
-                <table class = "table-data" id="location-data">
+                <table class = "table-data">
                     <thead>
                         <tr>
                             <th>Resource Location</th>
@@ -61,7 +61,7 @@
                 </table>
             {% endblock %}
         </div>
-        <div id="content">
+        <div id="rbacandpolicy">
             {% block rbac %}
                 <table class = "table-data">
                     <thead>
@@ -87,15 +87,10 @@
                     </tbody>
                 </table>
             {% endblock %}
-        </div>
-        <div id="content">
-            {% block recommendations %}<p>{{ recommendations }}</p>{% endblock %}
-        </div>
-        <div id="content">
             {% block policy %}
-                <thead>
-                    <tr>
-                        <table class = "table-data">
+                <table class = "table-data">
+                    <thead>
+                        <tr>
                             <th>Policy Assignment Name</th>
                             <th>policyDefinitionAction</th>
                             <th>Resource</th>
@@ -114,6 +109,9 @@
                     </tbody>
                 </table>
             {% endblock %}
+        </div>
+        <div>
+            {% block recommendations %}<p>{{ recommendations }}</p>{% endblock %}
         </div>
         <div class="activitylog">
             <table class = "table-data">
@@ -145,7 +143,7 @@
                     {% for items in activity_logs[:10] %}
                         <tr>
                             <td>
-                                {{ items['Action']}}
+                                {{ items['Action'] }}
                             </td>
                             <td>
                                 {{ items['Caller'] }}
