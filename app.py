@@ -198,20 +198,22 @@ def resourcetype():
     try:
         res_type = []
         res_type_json = {}
-        resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/resources?$resourceType=location eq '" + \
-            query_data+"'&api-version=2021-04-01"
-        req_headers = {'Authorization': 'Bearer ' +
+        if query_data == 'Microsoft.Compute/virtualMachines':
+            resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Compute/virtualMachines?api-version=2022-03-01"
+            req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_response = requests.get(url=resource_URI, headers=req_headers)
-        sub_resources = json.loads(res_response.text)
-        for items in sub_resources['value']:
-            res_type_json['name'] = items['name']  
-            res_type_json['type'] = items['type']            
-            res_type_json['kind'] = items['kind']
-            res_type_json['location'] = items['location']
-            res_type.append(res_type_json)
+            res_response = requests.get(url=resource_URI, headers=req_headers)
+            sub_resources = json.loads(res_response.text)
+            for items in sub_resources['value']:
+                res_type_json['name'] = items['name']  
+                res_type_json['location'] = items['location']            
+                res_type_json['hardwareProfile'] = items['properties']['hardwareProfile']['vmSize']
+                res_type_json['OS'] = items['properties']['storageProfile']['osDisk']['osType']
+                res_type_json['OSDiskType'] = items['properties']['storageProfile']['osDisk']['managedDisk']['storageAccountType']  
+                res_type_json['OSDiskType'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
+                res_type.append(res_type_json)
         
-        return render_template("resourcetype.html", resource_type=res_type)      
+        return render_template("virtualmachines.html", virtualmachines=res_type)      
                 
                 
         
