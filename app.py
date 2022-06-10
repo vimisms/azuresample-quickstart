@@ -164,7 +164,7 @@ def index():
                 data_sub_activity['EventTime']=items['eventTimestamp'] 
                 activity_Logs.append(data_sub_activity)             
     
-        print(activity_Logs)    
+        print(res_sub_activity['value'])    
 
     except ClientAuthenticationError as ex:
         print(ex.message)
