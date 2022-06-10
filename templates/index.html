@@ -9,7 +9,7 @@
         {% endblock %}
     </head>
     <body>
-        <div class="locationandtype">
+        <div class="locationtyperbac">
             {% block type %}
                 <table class = "table-data">
                     <thead>
@@ -59,10 +59,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            {% endblock %}
-        </div>
-        <div id="rbacandpolicy">
-            {% block rbac %}
+                {% endblock %}
+                {% block rbac %}
                 <table class = "table-data">
                     <thead>
                         <tr>
@@ -86,7 +84,11 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            
             {% endblock %}
+        </div>
+        <div id="policy">
+            
             {% block policy %}
                 <table class = "table-data">
                     <thead>

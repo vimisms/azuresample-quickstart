@@ -3,7 +3,7 @@ body {
     font-family: sans-serif;
 }
 
-.locationandtype {
+.locationtyperbac {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -11,7 +11,7 @@ body {
     align-items: stretch;
 }
 
-.rbacandpolicy {
+.policy {
     display: flex;
     align-items: center;
     justify-content: space-around;
