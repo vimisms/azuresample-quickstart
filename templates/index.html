@@ -9,6 +9,11 @@
         {% endblock %}
     </head>
     <body>
+        <div>
+            {%for key in sub_details%}
+            <p>{{sub_details[key]}}</p>
+            
+        </div>
         <div class="locationtyperbac">
             {% block type %}
                 <table class = "table-data">

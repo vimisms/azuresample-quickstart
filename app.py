@@ -46,6 +46,7 @@ print("Subscription ID is:\n" + str(os.environ['AZURE_SUBS_ID']))
 def index():
 
     try:
+        subscription_details={}
         resource_by_type = []
         resource_by_location = []
         role_definition_name = []
@@ -58,6 +59,15 @@ def index():
         data_sub_activity = {}
 
         data_rbac = {}
+        
+        subscription_detail_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"?api-version=2020-01-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_response = json.loads(requests.get(url=subscription_detail_uri, headers=req_headers).text)
+        subscription_details['SubscriptionID']=res_response['subscriptionId']
+        subscription_details['SubscriptionName']=res_response['displayName']
+             
+        
 
         resource_URI = 'https://management.azure.com/subscriptions/'+str(os.environ['AZURE_SUBS_ID'])+'/resources?api-version=2021-04-01'
         req_headers = {'Authorization': 'Bearer ' +
@@ -170,7 +180,7 @@ def index():
         print(ex.message)
         
     finally:
-        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
+        return render_template("index.html", sub_details = json.loads(json.dumps(subscription_details)),res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
     
 
 
@@ -195,7 +205,27 @@ def resourcelocation():
 @app.route('/resourcetype', methods=['GET', 'POST'])
 def resourcetype():
     query_data = request.form['resourcetype']
-    try:
+    if query_data == 'Microsoft.Compute/virtualMachines':
+        try:
+            res_type = []
+            res_type_json = {}
+        
+            resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Compute/virtualMachines?api-version=2022-03-01"
+            req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = requests.get(url=resource_URI, headers=req_headers)
+            sub_resources = json.loads(res_response.text)
+            for items in sub_resources['value']:
+                res_type_json['name'] = items['name']  
+                res_type_json['location'] = items['location']            
+                res_type_json['hardwareProfile'] = items['properties']['hardwareProfile']['vmSize']
+                res_type_json['OS'] = items['properties']['storageProfile']['osDisk']['osType']
+                res_type_json['OSDiskType'] = items['properties']['storageProfile']['osDisk']['managedDisk']['storageAccountType']  
+                res_type_json['OSDiskType'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
+                res_type.append(res_type_json)
+        
+            return render_template("virtualmachines.html", virtualmachines=res_type) 
+    
         res_type = []
         res_type_json = {}
         if query_data == 'Microsoft.Compute/virtualMachines':
