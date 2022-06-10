@@ -152,7 +152,7 @@ def index():
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_activity = json.loads(requests.get(
             url=sub_activity_uri, headers=req_headers).text)
-        if(len(res_sub_activity['value']) == 0):
+        if(len(res_sub_activity['value']) != 0):
             for items in res_sub_activity['value']:
                 data_sub_activity['Action']=items['authorization']['action']
                 data_sub_activity['Caller']=items['caller']
@@ -164,7 +164,7 @@ def index():
                 data_sub_activity['EventTime']=items['eventTimestamp'] 
                 activity_Logs.append(data_sub_activity)             
     
-        print(res_sub_activity['value'])    
+        print(activity_Logs)    
 
     except ClientAuthenticationError as ex:
         print(ex.message)
