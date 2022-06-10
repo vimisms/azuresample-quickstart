@@ -145,28 +145,28 @@
                     {% for items in activity_logs[:10] %}
                         <tr>
                             <td>
-                                {{ items['authorization']['action'] }}
+                                {{ items['Action']}}
                             </td>
                             <td>
-                                {{ items['caller'] }}
+                                {{ items['Caller'] }}
                             </td>
                             <td>
-                                {{ items['category']['localizedValue'] }}
+                                {{ items['Category'] }}
                             </td>
                             <td>
-                                {{ items['resourceId'] }}
+                                {{ items['ResourceId'] }}
                             </td>
                             <td>
-                                {{ items['resourceType']['localizedValue'] }}
+                                {{ items['ResourceType'] }}
                             </td>
                             <td>
-                                {{ items['operationName']['localizedValue'] }}
+                                {{ items['OperationName'] }}
                             </td>
                             <td>
-                                {{ items['status']['localizedValue'] }}
+                                {{ items['Status'] }}
                             </td>
                             <td>
-                                {{ items['eventTimestamp'] }}
+                                {{ items['EventTime'] }}
                             </td>
                         </tr>
                     {% endfor %}

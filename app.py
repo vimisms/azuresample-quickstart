@@ -51,9 +51,11 @@ def index():
         role_definition_name = []
         role_definition_name = []
         sub_policy = []
+        activity_Logs = []
         data_by_type = {}
         data_by_location = {}
         data_sub_policy = {}
+        data_sub_activity = {}
 
         data_rbac = {}
 
@@ -151,17 +153,24 @@ def index():
         res_sub_activity = json.loads(requests.get(
             url=sub_activity_uri, headers=req_headers).text)
         if(len(res_sub_activity['value']) == 0):
-            activity_logs = res_sub_activity       
-
-        else:
-            activity_logs = "Oops !!! There are some Advisor Recommendations"
-            
+            for items in res_sub_activity['value']:
+                data_sub_activity['Action']=items['authorization']['action']
+                data_sub_activity['Caller']=items['caller']
+                data_sub_activity['Category']=items['category']['localizedValue']
+                data_sub_activity['ResourceId']=items['resourceId']
+                data_sub_activity['ResourceType']=items['resourceType']['localizedValue']
+                data_sub_activity['OperationName']=items['operationName']['localizedValue']
+                data_sub_activity['Status']=items['status']['localizedValue']
+                data_sub_activity['EventTime']=items['eventTimestamp'] 
+                activity_Logs.append(data_sub_activity)             
+    
+        print(activity_Logs)    
 
     except ClientAuthenticationError as ex:
         print(ex.message)
         
     finally:
-        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_logs)))
+        return render_template("index.html", res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
     
 
 
