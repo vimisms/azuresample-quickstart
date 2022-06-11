@@ -197,14 +197,15 @@ def resourcelocation():
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
         for items in sub_resources['value']:
-                res_type_json['name'] = items['name']  
-                res_type_json['location'] = items['location']
-                res_type_json['type'] = items['type']
-                if 'tags' in items:
-                    res_type_json['tags'] = str(items['tags'])
-                else:
-                    res_type_json['tags'] = 'NULL'
-                res_type.append(res_type_json)
+            res_type_json['name'] = items['name']
+            res_type_json['location'] = items['location']
+            res_type_json['type'] = items['type']
+            if 'tags' in items:
+                res_type_json['tags'] = str(items['tags'])
+            else:
+                res_type_json['tags'] = 'NULL'
+                
+            res_type.append(res_type_json)
         
         
 

@@ -5,12 +5,11 @@
             <link rel="stylesheet" href="style.css" />
             <title>
                 {% block title %}{% endblock %}
-            - Azure Subscription Scanner</title>
+            Azure Subscription Scanner</title>
         {% endblock %}
     </head>
     <body>
-        <div id = "rbac_details">
-            <p>
+        <div>
                 <table class = "table-data">
                     <tr>
                         <th>Resource Name</th>
@@ -28,7 +27,6 @@
                         </tr>
                     {% endfor %}
                 </table>
-            </p>
         </div>
         
     </body>
