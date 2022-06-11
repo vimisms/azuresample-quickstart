@@ -17,7 +17,7 @@
                         <th>Resource Type</th>
                         <th>Resource Tags</th>
                     </tr>
-                    {% for items in resourcebylocation %}
+                    {% for items in resourcebylocation.items() %}
                         <tr>
                             <td>{{items['name']}}</td>
                             <td>{{items['location']}}</td>
