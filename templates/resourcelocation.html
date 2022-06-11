@@ -9,6 +9,27 @@
         {% endblock %}
     </head>
     <body>
+        <div id = "rbac_details">
+            <p>
+                <table class = "table-data">
+                    <tr>
+                        <th>Resource Name</th>
+                        <th>Resource Location</th>
+                        <th>Resource Type</th>
+                        <th>Resource Tags</th>
+                    </tr>
+                    {% for items in resourcebylocation %}
+                        <tr>
+                            <td>{{items['name']}}</td>
+                            <td>{{items['location']}}</td>
+                            <td>{{items['type']}}</td>
+                            <td>{{items['tags']}}</td>
+                            
+                        </tr>
+                    {% endfor %}
+                </table>
+            </p>
+        </div>
         
     </body>
 </html>

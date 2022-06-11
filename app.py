@@ -188,19 +188,30 @@ def index():
 def resourcelocation():
     query_data = request.form['location']
     try:
-
+        res_type = []
+        res_type_json = {}
         resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/resources?$filter=location eq '" + \
             query_data+"'&api-version=2021-04-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
         sub_resources = json.loads(res_response.text)
+        for items in sub_resources['value']:
+                res_type_json['name'] = items['name']  
+                res_type_json['location'] = items['location']
+                res_type_json['type'] = items['type']
+                if 'tags' in items:
+                    res_type_json['tags'] = str(items['tags'])
+                else:
+                    res_type_json['tags'] = 'NULL'
+                res_type.append(res_type_json)
+        
         
 
     except ClientAuthenticationError as ex:
         print(ex.message)
 
-    return render_template("resourcelocation.html")
+    return render_template("resourcelocation.html",resourcebylocation=res_type)
 
 @app.route('/resourcetype', methods=['GET', 'POST'])
 def resourcetype():
