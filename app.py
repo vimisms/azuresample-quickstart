@@ -120,6 +120,9 @@ def index():
         print(ex.message)
 
     try:
+        sub_recom_json = {}
+        sub_recom= []
+        
         sub_recommendation_uri = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
@@ -130,8 +133,14 @@ def index():
             print(recommendations)
 
         else:
-            recommendations = "Oops !!! There are some Advisor Recommendations"
-            print(recommendations)
+            for items in res_sub_recommendations['value']:
+                sub_recom_json['category'] = items['properties']['category']
+                sub_recom_json['impact'] = items['properties']['impact']
+                sub_recom_json['impactedField'] = items['properties']['impactedField']
+                sub_recom_json['impactedValue'] = items['properties']['impactedValue']
+                sub_recom_json['problem'] = items['properties']['shortDescription']['problem']
+                sub_recom_json['solution'] = items['properties']['shortDescription']['solution']
+                sub_recom.append(sub_recom_json)
 
     except ClientAuthenticationError as ex:
         print(ex.message)
@@ -180,7 +189,7 @@ def index():
         print(ex.message)
         
     finally:
-        return render_template("index.html", sub_details = json.loads(json.dumps(subscription_details)),res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=recommendations, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
+        return render_template("index.html", sub_details = json.loads(json.dumps(subscription_details)),res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=sub_recom, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
     
 
 
