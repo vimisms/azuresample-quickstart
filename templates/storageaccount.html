@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+            <link rel="stylesheet" href="style.css" />
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        {{storageaccounts}}
+        
+    </body>
+</html>

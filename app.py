@@ -223,13 +223,18 @@ def resourcetype():
                 res_type_json['OSDiskType'] = items['properties']['storageProfile']['osDisk']['managedDisk']['storageAccountType']  
                 res_type_json['OSDiskType'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
                 res_type.append(res_type_json)
+                
+        except ClientAuthenticationError as ex:
+            print(ex.message)
+        finally:
+            return render_template("virtualmachines.html",virtualmachines=res_type)
         
-            return render_template("virtualmachines.html", virtualmachines=res_type) 
-    
-        res_type = []
-        res_type_json = {}
-        if query_data == 'Microsoft.Compute/virtualMachines':
-            resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Compute/virtualMachines?api-version=2022-03-01"
+    if query_data == 'Microsoft.Web/serverfarms':
+        try:
+            res_type = []
+            res_type_json = {}
+        
+            resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Web/serverfarms?api-version=2021-02-01"
             req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -237,21 +242,71 @@ def resourcetype():
             for items in sub_resources['value']:
                 res_type_json['name'] = items['name']  
                 res_type_json['location'] = items['location']            
-                res_type_json['hardwareProfile'] = items['properties']['hardwareProfile']['vmSize']
-                res_type_json['OS'] = items['properties']['storageProfile']['osDisk']['osType']
-                res_type_json['OSDiskType'] = items['properties']['storageProfile']['osDisk']['managedDisk']['storageAccountType']  
-                res_type_json['OSDiskType'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
+                res_type_json['Kind'] = items['kind']
+                res_type_json['SKUName'] = items['sku']['name']
+                res_type_json['SKUTier'] = items['sku']['tier']
+                res_type_json['SKUSize'] = items['sku']['size']
+                res_type_json['family'] = items['sku']['family']
+                res_type_json['capacity'] = items['sku']['capacity']
+                
                 res_type.append(res_type_json)
-        
-        return render_template("virtualmachines.html", virtualmachines=res_type)      
                 
-                
+        except ClientAuthenticationError as ex:
+            print(ex.message)
+            
+            
+        finally:
+            return render_template("appserviceplans.html",appserviceplans=res_type)
+            
+    if query_data == 'Microsoft.Storage/storageAccounts':
+        try:
+            res_type = []
+            res_type_json = {}
         
-
-    except ClientAuthenticationError as ex:
-        print(ex.message)
-
-    return render_template("resourcelocation.html")
+            resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
+            req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = requests.get(url=resource_URI, headers=req_headers)
+            sub_resources = json.loads(res_response.text)
+            for items in sub_resources['value']:
+                res_type_json['name'] = items['name']  
+                res_type_json['location'] = items['location']            
+                res_type_json['Kind'] = items['kind']
+                res_type_json['SKUName'] = items['sku']['name']
+                res_type_json['SKUTier'] = items['sku']['tier']                
+                res_type.append(res_type_json)
+                
+        except ClientAuthenticationError as ex:
+            print(ex.message)
+            
+        finally:
+            return render_template("storageaccount.html",storageaccounts=res_type)
+            
+    if query_data == 'Microsoft.Network/virtualNetworks':
+        try:
+            res_type = []
+            res_type_json = {}
+        
+            resource_URI = "https://management.azure.com/subscriptions/"+str(os.environ['AZURE_SUBS_ID'])+"/providers/Microsoft.Network/virtualNetworks?api-version=2021-08-01"
+            req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = requests.get(url=resource_URI, headers=req_headers)
+            sub_resources = json.loads(res_response.text)
+            for items in sub_resources['value']:
+                res_type_json['name'] = items['name']  
+                res_type_json['location'] = items['location']            
+                res_type_json['addressSpace'] = items['properties']['addressSpace']['addressPrefixes'][0]
+                res_type_json['subnets'] = len(items['properties']['subnets'])              
+                res_type_json['virtualNetworkPeerings'] = len(items['properties']['virtualNetworkPeerings'])
+                res_type_json['enableDdosProtection'] = items['properties']['enableDdosProtection']
+                res_type.append(res_type_json)
+                
+        except ClientAuthenticationError as ex:
+            print(ex.message)   
+            
+        finally:
+            return render_template("virtualnetworks.html",virtualnetworks=res_type)
+            
 
 
 @app.route('/rbac', methods=['GET', 'POST'])
