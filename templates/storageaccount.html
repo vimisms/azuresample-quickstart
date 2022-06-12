@@ -9,7 +9,33 @@
         {% endblock %}
     </head>
     <body>
-        {{storageaccounts}}
+        <div id = "centeralize-page">
+            <table class = "table-data">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Kind</th>
+                        <th>SKUName</th>
+                        <th>SKUTier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dict_items in storageaccounts %}
+                        <tr>
+                            <td>{{storageaccounts['name']}}</td>
+                            <td>{{storageaccounts['location']}}</td>
+                            <td>{{storageaccounts['Kind']}}</td>
+                            <td>{{storageaccounts['SKUName']}}</td>
+                            <td>{{storageaccounts['SKUTier']}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
+        </div>
         
     </body>
 </html>

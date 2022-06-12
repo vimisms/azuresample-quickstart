@@ -13,6 +13,7 @@
             <div>
                 {% for key in sub_details %}<p>{{ sub_details[key] }}</p>{% endfor %}
             </div>
+            <div class = "centerheading">Resource by Location, Type and RBAC</div>
             <div class="locationtyperbac">
                 {% block type %}
                     <table class = "table-data">
@@ -90,9 +91,10 @@
                     </table>
                 {% endblock %}
             </div>
+            <div class = "centerheading">Policy Non Compliance on Subscription</div>
             <div id="policy">
                 {% block policyandrecommendations %}
-                    <table class = "widthtable" >
+                    <table class = "widthtable">
                         <thead>
                             <tr>
                                 <th>Policy Assignment Name</th>
@@ -113,118 +115,131 @@
                         </tbody>
                     </table>
                 {% endblock %}
-                {% block recommendations %}
+            </div>
+            <div>
+                <div class = "centerheading">
+                    Azure Advisor Recommendations on Subscription
+                </div>
+                <div>
+                    {% block recommendations %}
+                        <table class = "widthtable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Category
+                                    </th>
+                                    <th>
+                                        Impact
+                                    </th>
+                                    <th>
+                                        Impacted Field
+                                    </th>
+                                    <th>
+                                        Impacted Value
+                                    </th>
+                                    <th>
+                                        Problem
+                                    </th>
+                                    <th>
+                                        Solution
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for items in recommendations[:5] %}
+                                    <tr>
+                                        <td>
+                                            {{ items['category'] }}
+                                        </td>
+                                        <td>
+                                            {{ items['impact'] }}
+                                        </td>
+                                        <td>
+                                            {{ items['impactedField'] }}
+                                        </td>
+                                        <td>
+                                            {{ items['impactedValue'] }}
+                                        </td>
+                                        <td>
+                                            {{ items['problem'] }}
+                                        </td>
+                                        <td>
+                                            {{ items['solution'] }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endblock %}
+                </div>
+                <div class = "centerheading">
+                    Azure Activity on Subscription
+                </div>
+                <div class="activitylog">
                     <table class = "widthtable">
                         <thead>
                             <tr>
-                                <th>Category</th>
-                                <th>Impact</th>
                                 <th>
-                                    Impacted Field
+                                    Activity Type
                                 </th>
                                 <th>
-                                    Impacted Value
+                                    Caller
                                 </th>
                                 <th>
-                                    Problem
+                                    Category
                                 </th>
                                 <th>
-                                    Solution
+                                    Resource ID
+                                </th>
+                                <th>
+                                    Resource Type
+                                </th>
+                                <th>
+                                    Operation
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Event Time Stamp
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for items in recommendations[:5] %}
+                            {% for items in activity_logs[:10] %}
                                 <tr>
                                     <td>
-                                        {{ items['category'] }}
+                                        {{ items['Action'] }}
                                     </td>
                                     <td>
-                                        {{ items['impact'] }}
+                                        {{ items['Caller'] }}
                                     </td>
                                     <td>
-                                        {{ items['impactedField'] }}
+                                        {{ items['Category'] }}
                                     </td>
                                     <td>
-                                        {{ items['impactedValue'] }}
+                                        {{ items['ResourceId'] }}
                                     </td>
                                     <td>
-                                        {{ items['problem'] }}
+                                        {{ items['ResourceType'] }}
                                     </td>
                                     <td>
-                                        {{ items['solution'] }}
+                                        {{ items['OperationName'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['Status'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['EventTime'] }}
                                     </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-                {% endblock %}
+                </div>
+                <div id="footer">
+                    {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+                </div>
             </div>
-            <div class="activitylog">
-                <table class = "widthtable">
-                    <thead>
-                        <tr>
-                            <th>
-                                Activity Type
-                            </th>
-                            <th>
-                                Caller
-                            </th>
-                            <th>
-                                Category
-                            </th>
-                            <th>
-                                Resource ID
-                            </th>
-                            <th>
-                                Resource Type
-                            </th>
-                            <th>
-                                Operation
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th>
-                                Event Time Stamp
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for items in activity_logs[:10] %}
-                            <tr>
-                                <td>
-                                    {{ items['Action'] }}
-                                </td>
-                                <td>
-                                    {{ items['Caller'] }}
-                                </td>
-                                <td>
-                                    {{ items['Category'] }}
-                                </td>
-                                <td>
-                                    {{ items['ResourceId'] }}
-                                </td>
-                                <td>
-                                    {{ items['ResourceType'] }}
-                                </td>
-                                <td>
-                                    {{ items['OperationName'] }}
-                                </td>
-                                <td>
-                                    {{ items['Status'] }}
-                                </td>
-                                <td>
-                                    {{ items['EventTime'] }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div id="footer">
-                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
-            </div>
-        </div>
-    </body>
-</html>
+        </body>
+    </html>
