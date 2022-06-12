@@ -215,7 +215,7 @@ def resourcelocation():
             else:
                 res_loc_json['tags'] = 'NULL'
                 
-            res_loc.append(res_loc_json)
+            res_loc.append(res_loc_json.copy())
             #print(res_loc)
         
         
