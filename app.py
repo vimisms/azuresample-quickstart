@@ -18,7 +18,7 @@ credential = DefaultAzureCredential()
 client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
-print("client secret is " + str(bank_secret.value))
+#print("client secret is " + str(bank_secret.value))
 timeStamp = date.today()-timedelta(30)
 ###Get token for resource manager API###
 
@@ -28,7 +28,7 @@ mgmt_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
 mgmt_req_body = 'grant_type=client_credentials&client_secret='+str(bank_secret.value)+'&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&resource=https%3A%2F%2Fmanagement.azure.com%2F'
 mgmtresponse = requests.request(
     "POST", mgmt_token_uri, headers=mgmt_req_headers, data=mgmt_req_body)
-print("mgmt token is \n" + str(mgmtresponse.text))
+#print("mgmt token is \n" + str(mgmtresponse.text))
 
 
 ###Get token for Graph to get user name from principle ID###
@@ -38,7 +38,7 @@ graph_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
 graph_req_body = 'grant_type=client_credentials&client_secret='+str(bank_secret.value)+'&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
 graphresponse = requests.request(
     "POST", graph_token_uri, headers=graph_req_headers, data=graph_req_body)
-print("graph token is \n" + str(graphresponse.text))
+#print("graph token is \n" + str(graphresponse.text))
 print("Subscription ID is:\n" + str(os.environ['AZURE_SUBS_ID']))
 
 
@@ -130,7 +130,7 @@ def index():
             url=sub_recommendation_uri, headers=req_headers).text)
         if(len(res_sub_recommendations['value']) == 0):
             recommendations = "Congrats !!! your subscription has no Advisor Recommendations"
-            print(recommendations)
+            #print(recommendations)
 
         else:
             for items in res_sub_recommendations['value']:
@@ -183,7 +183,7 @@ def index():
                 data_sub_activity['EventTime']=items['eventTimestamp'] 
                 activity_Logs.append(data_sub_activity)             
     
-        print(activity_Logs)    
+        #print(activity_Logs)    
 
     except ClientAuthenticationError as ex:
         print(ex.message)
@@ -215,6 +215,7 @@ def resourcelocation():
                 res_type_json['tags'] = 'NULL'
                 
             res_type.append(res_type_json)
+            print(res_type)
         
         
 
