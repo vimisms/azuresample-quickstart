@@ -9,7 +9,39 @@
         {% endblock %}
     </head>
     <body>
-        {{appserviceplans}}
+        <div id = "centeralize-page">
+            <table class = "table-data">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Kind</th>
+                        <th>SKUName</th>
+                        <th>SKUTier</th>
+                        <th>SKUSize</th>
+                        <th>family</th>
+                        <th>capacity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dict_items in appserviceplans %}
+                        <tr>
+                            <td>{{appserviceplans['name']}}</td>
+                            <td>{{appserviceplans['location']}}</td>
+                            <td>{{appserviceplans['Kind']}}</td>
+                            <td>{{appserviceplans['SKUName']}}</td>
+                            <td>{{appserviceplans['SKUTier']}}</td>
+                            <td>{{appserviceplans['SKUSize']}}</td>
+                            <td>{{appserviceplans['family']}}</td>
+                            <td>{{appserviceplans['capacity']}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
+        </div>
         
     </body>
 </html>

@@ -10,13 +10,15 @@
     </head>
     <body>
         <div id = "centeralize-page">
-            <p>
-                <table class = "table-data">
+            <table class = "table-data">
+                <thead>
                     <tr>
                         <th>Object Type</th>
                         <th>Object Name</th>
                         <th>Scope</th>
                     </tr>
+                </thead>
+                <tbody>
                     {% for dict_items in rbac_details %}
                         <tr>
                             {% if "appId" in dict_items %}
@@ -34,11 +36,11 @@
                             {% endif %}
                         </tr>
                     {% endfor %}
-                </table>
-            </p>
-        </div>
-        <div id="footer">
-            {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+                </tbody>
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
         </div>
     </body>
 </html>
