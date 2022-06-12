@@ -3,6 +3,12 @@ body {
     font-family: sans-serif;
 }
 
+.centeralize-page {
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .locationtyperbac {
     display: flex;
     align-items: center;
