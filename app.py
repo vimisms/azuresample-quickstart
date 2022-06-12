@@ -205,6 +205,7 @@ def resourcelocation():
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         loc_response = requests.get(url=resource_URI, headers=req_headers)
         loc_resources = json.loads(loc_response.text)
+        print(loc_resources)
         for items in loc_resources['value']:
             res_loc_json['name'] = items['name']
             res_loc_json['location'] = items['location']
@@ -215,7 +216,7 @@ def resourcelocation():
                 res_loc_json['tags'] = 'NULL'
                 
             res_loc.append(res_loc_json)
-            print(res_loc)
+            #print(res_loc)
         
         
 
