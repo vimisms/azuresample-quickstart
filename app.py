@@ -294,7 +294,7 @@ def resourcetype():
                 res_type_json['Kind'] = items['kind']
                 res_type_json['SKUName'] = items['sku']['name']
                 res_type_json['SKUTier'] = items['sku']['tier']                
-                res_type.append(res_type_json)
+                res_type.append(res_type_json.copy())
                 
         except ClientAuthenticationError as ex:
             print(ex.message)
