@@ -137,7 +137,7 @@ def index():
                 sub_recom_json['impactedValue'] = items['properties']['impactedValue']
                 sub_recom_json['problem'] = items['properties']['shortDescription']['problem']
                 sub_recom_json['solution'] = items['properties']['shortDescription']['solution']
-                sub_recom.append(sub_recom_json)
+                sub_recom.append(sub_recom_json.copy())
 
     except ClientAuthenticationError as ex:
         print(ex.message)
