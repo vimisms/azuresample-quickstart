@@ -29,6 +29,10 @@ body {
     flex-grow: 1;
 }
 
+.widthtable {
+    width: 100%;
+}
+
 table {
     width: 300px;
     background-color: yellowgreen;
