@@ -23,11 +23,11 @@
                 <tbody>
                     {% for dict_items in storageaccounts %}
                         <tr>
-                            <td>{{storageaccounts['name']}}</td>
-                            <td>{{storageaccounts['location']}}</td>
-                            <td>{{storageaccounts['Kind']}}</td>
-                            <td>{{storageaccounts['SKUName']}}</td>
-                            <td>{{storageaccounts['SKUTier']}}</td>
+                            <td>{{dict_items['name']}}</td>
+                            <td>{{dict_items['location']}}</td>
+                            <td>{{dict_items['Kind']}}</td>
+                            <td>{{dict_items['SKUName']}}</td>
+                            <td>{{dict_items['SKUTier']}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
