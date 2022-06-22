@@ -10,7 +10,7 @@
     </head>
     <body>
         <div class="centeralize-page">
-            <form action="/subscription" method = "post">
+            <form action="/home" method = "post">
                 <label for="subscriptions">Select a Subscription:</label>
                 <select id="subscription" name="subscription">
                     {% for items in subscriptions %}
@@ -21,7 +21,7 @@
                     </select>
                     <input type="submit">
                 </form>
-                {{subscriptions}}
+              
             </div>
         </body>
     </html>
