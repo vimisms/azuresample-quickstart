@@ -83,7 +83,8 @@ def subscription():
 def home():
 
     try:
-        query_data = request.form['subscription']
+        global query_data_subscription 
+        query_data_subscription = request.form['subscription']
         subscription_details={}
         resource_by_type = []
         resource_by_location = []
@@ -98,7 +99,7 @@ def home():
 
         data_rbac = {}
         
-        subscription_detail_uri = "https://management.azure.com/subscriptions/"+query_data+"?api-version=2020-01-01"
+        subscription_detail_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"?api-version=2020-01-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = json.loads(requests.get(url=subscription_detail_uri, headers=req_headers).text)
@@ -107,7 +108,7 @@ def home():
              
         
 
-        resource_URI = 'https://management.azure.com/subscriptions/'+query_data+'/resources?api-version=2021-04-01'
+        resource_URI = 'https://management.azure.com/subscriptions/'+query_data_subscription+'/resources?api-version=2021-04-01'
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -132,7 +133,7 @@ def home():
         print("Request succeeded")
 
     try:
-        sub_role_assignment_Uri = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
+        sub_role_assignment_Uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_role_assignments = requests.get(
@@ -161,7 +162,7 @@ def home():
         sub_recom_json = {}
         sub_recom= []
         
-        sub_recommendation_uri = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
+        sub_recommendation_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_recommendations = json.loads(requests.get(
@@ -184,7 +185,7 @@ def home():
         print(ex.message)
 
     try:
-        sub_policy_state_uri = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
+        sub_policy_state_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_policy = json.loads(requests.post(
@@ -204,7 +205,7 @@ def home():
 
     
     try:
-        sub_activity_uri = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '" + str(timeStamp) +"'"
+        sub_activity_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '" + str(timeStamp) +"'"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_activity = json.loads(requests.get(
@@ -237,7 +238,7 @@ def resourcelocation():
     try:
         res_loc = []
         res_loc_json = {}
-        resource_URI = "https://management.azure.com/subscriptions/"+query_data+"/resources?$filter=location eq '" + \
+        resource_URI = "https://management.azure.com/subscriptions/"+query_data_subscription+"/resources?$filter=location eq '" + \
             query_data+"'&api-version=2021-04-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
@@ -271,7 +272,7 @@ def resourcetype():
             res_type = []
             res_type_json = {}
         
-            resource_URI = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Compute/virtualMachines?api-version=2022-03-01"
+            resource_URI = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Compute/virtualMachines?api-version=2022-03-01"
             req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -295,7 +296,7 @@ def resourcetype():
             res_type = []
             res_type_json = {}
         
-            resource_URI = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Web/serverfarms?api-version=2021-02-01"
+            resource_URI = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Web/serverfarms?api-version=2021-02-01"
             req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -324,7 +325,7 @@ def resourcetype():
             res_type = []
             res_type_json = {}
         
-            resource_URI = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
+            resource_URI = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
             req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -348,7 +349,7 @@ def resourcetype():
             res_type = []
             res_type_json = {}
         
-            resource_URI = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Network/virtualNetworks?api-version=2021-08-01"
+            resource_URI = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Network/virtualNetworks?api-version=2021-08-01"
             req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = requests.get(url=resource_URI, headers=req_headers)
@@ -375,14 +376,14 @@ def rbac():
     query_data = request.form['rbactype']
     try:
         g_res_list = []
-        role_definition_uri = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Authorization/roleDefinitions?api-version=2015-07-01"
+        role_definition_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Authorization/roleDefinitions?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_role_definition = json.loads((requests.get(url=role_definition_uri, headers=req_headers)).text)
         for items in res_role_definition['value']:
             if items['properties']['roleName'] == query_data:
                 role_def_id = items['id']
 
-        r_assignment_uri = "https://management.azure.com/subscriptions/"+query_data+"/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
+        r_assignment_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01"
         req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         r_assignment_res = json.loads((requests.get(url=r_assignment_uri, headers=req_headers)).text)
         for items in r_assignment_res['value']:
