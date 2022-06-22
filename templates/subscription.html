@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        {% block head %}
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="centeralize-page">
+            <form action="/subscription" method = "post">
+                <label for="subscriptions">Select a Subscription:</label>
+                <select id="subscription" name="subscription">
+                    {% for items in subscriptions %}
+                        <option value = "{{ items['id'] }}">
+                            {{ items['name'] }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                    <input type="submit">
+                </form>
+                {{subscriptions}}
+            </div>
+        </body>
+    </html>

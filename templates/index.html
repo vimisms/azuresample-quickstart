@@ -12,7 +12,7 @@
         <div class="centeralize-page">
             <form action="/subscription" method = "post">
                 <label for="managementgroups">Select a management group:</label>
-                <select id="managementgroups" name="managementgroups">
+                <select id="managementgroup" name="managementgroup">
                     {% for items in management_groups %}
                         <option value = "{{ items['id'] }}">
                             {{ items['name'] }}
@@ -21,7 +21,6 @@
                     </select>
                     <input type="submit">
                 </form>
-                {{ management_groups }}
             </div>
         </body>
     </html>

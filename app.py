@@ -57,5 +57,26 @@ def index():
     
     except ClientAuthenticationError as ex:
         print(ex.message)
+        
+@app.route('/subscription', methods=['GET', 'POST'])
+def subscription():
+    try:
+        query_data = request.form['managementgroup']
+        subscriptions_json = {}
+        subscriptions_list = []
+        
+        subscriptions_uri = "https://management.azure.com/providers/Microsoft.Management/managementGroups/" +query_data+ "/subscriptions?api-version=2020-05-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_response = json.loads(requests.get(url=subscriptions_uri, headers=req_headers).text)
+        for items in res_response['value']:
+            subscriptions_json['name'] = items['properties']['displayName']
+            subscriptions_json['id'] = items['name']
+            subscriptions_list.append(subscriptions_json.copy())
+
+        return render_template("subscription.html", subscriptions =subscriptions_list)
+    
+    except ClientAuthenticationError as ex:
+        print(ex.message)
             
         
