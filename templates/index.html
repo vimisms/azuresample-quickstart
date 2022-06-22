@@ -10,7 +10,18 @@
     </head>
     <body>
         <div class="centeralize-page">
-            {{management_groups}}
+            <form action="/subscription" method = "post">
+                <label for="managementgroups">Select a management group:</label>
+                <select id="managementgroups" name="managementgroups">
+                    {% for items in management_groups %}
+                        <option value = "{{ items['id'] }}">
+                            {{ items['name'] }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                    <input type="submit">
+                </form>
+                {{ management_groups }}
             </div>
         </body>
     </html>
