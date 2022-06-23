@@ -1,0 +1,1 @@
+console.log("I am able to read JS")
