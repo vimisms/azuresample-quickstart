@@ -362,7 +362,7 @@ def resourcetype():
                 res_type_json['subnets'] = len(items['properties']['subnets'])              
                 res_type_json['virtualNetworkPeerings'] = len(items['properties']['virtualNetworkPeerings'])
                 res_type_json['enableDdosProtection'] = items['properties']['enableDdosProtection']
-                res_type.append(res_type_json)
+                res_type.append(res_type_json.copy())
             print(res_type)
                 
         except ClientAuthenticationError as ex:
