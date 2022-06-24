@@ -2,7 +2,6 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-        
         {% block head %}
             <title>
                 {% block title %}{% endblock %}
@@ -19,9 +18,9 @@
                             {{ items['name'] }}
                         </option>
                     {% endfor %}
-                    </select>
-                    <input type="submit">
-                </form>
-            </div>
-        </body>
-    </html>
+                </select>
+                <input type="submit">
+            </form>
+        </div>
+    </body>
+</html>

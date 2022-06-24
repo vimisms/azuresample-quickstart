@@ -2,14 +2,37 @@
 <html lang="en">
     <head>
         {% block head %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
             <title>
                 {% block title %}{% endblock %}
             - Azure Subscription Scanner</title>
         {% endblock %}
     </head>
     <body>
-        {{virtualnetworks}}
-        
+        <div class = "centeralize-page">
+            <table class = "table-data">
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Resource Location</th>
+                    <th>Address Space</th>
+                    <th>Subnets</th>
+                    <th>VNET Peerings</th>
+                    <th>DDOS Protection Enabled</th>
+                </tr>
+                {% for items in virtualmachines %}
+                    <tr>
+                        <td>{{ items['name'] }}</td>
+                        <td>{{ items['location'] }}</td>
+                        <td>{{ items['addressSpace'] }}</td>
+                        <td>{{ items['subnets'] }}</td>
+                        <td>{{ items['virtualNetworkPeerings'] }}</td>
+                        <td>{{ items['enableDdosProtection'] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
+        </div>
     </body>
 </html>

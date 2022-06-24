@@ -9,8 +9,7 @@
         {% endblock %}
     </head>
     <body>
-        <div id = "centeralize-page">
-            <p>
+        <div class = "centeralize-page">
                 <table class = "table-data">
                     <tr>
                         <th>Resource ID</th>
@@ -24,14 +23,12 @@
                             <td>{{ items['location'] }}</td>
                             <td>{{ items['name'] }}</td>
                             <td>{{ items['type'] }}</td>
-                          
                         </tr>
                     {% endfor %}
                 </table>
-            </p>
-        </div>
-        <div id="footer">
-            {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
         </div>
     </body>
 </html>

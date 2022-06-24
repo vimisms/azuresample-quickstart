@@ -283,7 +283,7 @@ def resourcetype():
                 res_type_json['hardwareProfile'] = items['properties']['hardwareProfile']['vmSize']
                 res_type_json['OS'] = items['properties']['storageProfile']['osDisk']['osType']
                 res_type_json['OSDiskType'] = items['properties']['storageProfile']['osDisk']['managedDisk']['storageAccountType']  
-                res_type_json['OSDiskType'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
+                res_type_json['Imagereference'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
                 res_type.append(res_type_json.copy())
                 
         except ClientAuthenticationError as ex:

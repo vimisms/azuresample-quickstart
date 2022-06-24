@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         {% block head %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
             <title>
                 {% block title %}{% endblock %}
             Azure Subscription Scanner</title>
@@ -10,26 +10,22 @@
     </head>
     <body>
         <div class="centeralize-page">
-        <div>
-                <table class = "table-data">
+            <table class = "table-data">
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Resource Location</th>
+                    <th>Resource Type</th>
+                    <th>Resource Tags</th>
+                </tr>
+                {% for items in resourcebylocation %}
                     <tr>
-                        <th>Resource Name</th>
-                        <th>Resource Location</th>
-                        <th>Resource Type</th>
-                        <th>Resource Tags</th>
+                        <td>{{ items['name'] }}</td>
+                        <td>{{ items['location'] }}</td>
+                        <td>{{ items['type'] }}</td>
+                        <td>{{ items['tags'] }}</td>
                     </tr>
-                    {% for items in resourcebylocation %}
-                        <tr>
-                            <td>{{items['name']}}</td>
-                            <td>{{items['location']}}</td>
-                            <td>{{items['type']}}</td>
-                            <td>{{items['tags']}}</td>
-                            
-                        </tr>
-                    {% endfor %}
-                </table>
+                {% endfor %}
+            </table>
         </div>
-    </div>
-        
     </body>
 </html>
