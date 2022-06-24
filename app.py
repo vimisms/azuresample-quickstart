@@ -291,7 +291,7 @@ def resourcetype():
         finally:
             return render_template("virtualmachines.html",virtualmachines=res_type)
         
-    elif query_data == 'Microsoft.Web/serverfarms':
+    elif query_data == 'Microsoft.Web/serverFarms':
         try:
             res_type = []
             res_type_json = {}
@@ -312,6 +312,8 @@ def resourcetype():
                 res_type_json['capacity'] = items['sku']['capacity']
                 
                 res_type.append(res_type_json.copy())
+            
+            print(res_type)
                 
         except ClientAuthenticationError as ex:
             print(ex.message)           
@@ -361,6 +363,7 @@ def resourcetype():
                 res_type_json['virtualNetworkPeerings'] = len(items['properties']['virtualNetworkPeerings'])
                 res_type_json['enableDdosProtection'] = items['properties']['enableDdosProtection']
                 res_type.append(res_type_json)
+            print(res_type)
                 
         except ClientAuthenticationError as ex:
             print(ex.message)   
