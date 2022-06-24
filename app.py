@@ -284,14 +284,14 @@ def resourcetype():
                 res_type_json['OS'] = items['properties']['storageProfile']['osDisk']['osType']
                 res_type_json['OSDiskType'] = items['properties']['storageProfile']['osDisk']['managedDisk']['storageAccountType']  
                 res_type_json['OSDiskType'] = str(items['properties']['storageProfile']['imageReference']['publisher']) +' '+ str(items['properties']['storageProfile']['imageReference']['exactVersion'])
-                res_type.append(res_type_json)
+                res_type.append(res_type_json.copy())
                 
         except ClientAuthenticationError as ex:
             print(ex.message)
         finally:
             return render_template("virtualmachines.html",virtualmachines=res_type)
         
-    if query_data == 'Microsoft.Web/serverfarms':
+    elif query_data == 'Microsoft.Web/serverfarms':
         try:
             res_type = []
             res_type_json = {}
@@ -311,16 +311,15 @@ def resourcetype():
                 res_type_json['family'] = items['sku']['family']
                 res_type_json['capacity'] = items['sku']['capacity']
                 
-                res_type.append(res_type_json)
+                res_type.append(res_type_json.copy())
                 
         except ClientAuthenticationError as ex:
-            print(ex.message)
-            
+            print(ex.message)           
             
         finally:
             return render_template("appserviceplans.html",appserviceplans=res_type)
             
-    if query_data == 'Microsoft.Storage/storageAccounts':
+    elif query_data == 'Microsoft.Storage/storageAccounts':
         try:
             res_type = []
             res_type_json = {}
@@ -344,7 +343,7 @@ def resourcetype():
         finally:
             return render_template("storageaccount.html",storageaccounts=res_type)
             
-    if query_data == 'Microsoft.Network/virtualNetworks':
+    elif query_data == 'Microsoft.Network/virtualNetworks':
         try:
             res_type = []
             res_type_json = {}
@@ -366,8 +365,31 @@ def resourcetype():
         except ClientAuthenticationError as ex:
             print(ex.message)   
             
+            
         finally:
             return render_template("virtualnetworks.html",virtualnetworks=res_type)
+
+    else:
+        try:
+            res_type = []
+            res_type_json = {}
+            resource_URI = "https://management.azure.com/subscriptions/"+query_data_subscription+"/resources?$filter=resourceType eq '" + \
+            query_data+"'&api-version=2021-04-01"
+            req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = requests.get(url=resource_URI, headers=req_headers)
+            sub_resources = json.loads(res_response.text)
+            for items in sub_resources['value']:
+                res_type_json['id'] = items['id']  
+                res_type_json['location'] = items['location']            
+                res_type_json['name'] = items['name']
+                res_type_json['type'] = items['type']
+                res_type.append(res_type_json.copy())
+        except ClientAuthenticationError as ex:
+            print(ex.message) 
+        
+        finally:
+            return render_template("resourcetype.html", resourcetype=res_type)
             
 
 
