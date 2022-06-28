@@ -81,9 +81,10 @@ input {
     position: absolute;
     left: 0;
     right: 0;
-    height: 20px;
+    height: 40px;
     background-color: rgb(0, 162, 255);
     color: white;
+    margin-bottom: 20px;
 }
 
 * {
