@@ -104,6 +104,8 @@ def compliancecheck():
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_checks_json['Status'] = "Passed"
                 storage_account_checks_list.append(storage_account_checks_json.copy())   
+                
+        for items in res_response['value']:
             if items['properties']['publicNetworkAccess'] == "Enabled":
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have publich access disabled"
                 storage_account_checks_json['Status'] = "Failed"
@@ -113,6 +115,8 @@ def compliancecheck():
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have publich access disabled"
                 storage_account_checks_json['Status'] = "Passed"
                 storage_account_checks_list.append(storage_account_checks_json.copy())
+                
+        for items in res_response['value']:
             if items['properties']['minimumTlsVersion'] == "TLS1_2":
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
                 storage_account_checks_json['Status'] = "Failed"
@@ -122,7 +126,8 @@ def compliancecheck():
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
                 storage_account_checks_json['Status'] = "Passed"
                 storage_account_checks_list.append(storage_account_checks_json.copy())
-            
+        
+        for items in res_response['value']:            
             if items['properties']['encryption']['requireInfrastructureEncryption'] == "false":
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have encryption"
                 storage_account_checks_json['Status'] = "Failed"
