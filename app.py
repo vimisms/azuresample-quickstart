@@ -109,7 +109,7 @@ def compliancecheck():
                 storage_account_checks_list.append(storage_account_pvt_json.copy())   
                 
         for items in res_response['value']:
-            if items['properties']['publicNetworkAccess'] == "Enabled":
+            if items['properties']['publicNetworkAccess'] == "Enabled" or items['properties']['networkAcls']['defaultAction']  == 'Allow':
                 storage_account_pub_json['ComplianceName'] = "All Storage accounts must have publich access disabled"
                 storage_account_pub_json['Status'] = "Failed"
                 storage_account_pub_json['Resource'] = items['name']                             
