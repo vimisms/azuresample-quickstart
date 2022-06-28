@@ -78,13 +78,46 @@ def subscription():
     
     except ClientAuthenticationError as ex:
         print(ex.message)
+        
+        
+@app.route('/compliancecheck', methods=['GET', 'POST'])
+def compliancecheck():
+    try:
+        global query_data_subscription 
+        query_data_subscription = request.form['subscription']
+        
+        storage_account_checks_json = {}
+        storage_account_checks_list = []
+        stg_acct_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_response = json.loads(requests.get(url=stg_acct_uri, headers=req_headers).text)
+        for items in res_response['value']:
+            if len(items['properties']['privateEndpointConnections']) == 0:
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+                storage_account_checks_json['Status'] = "Failed"
+                storage_account_checks_list.append(storage_account_checks_json)
+                
+            else:
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+                storage_account_checks_json['Status'] = "Passed"
+                storage_account_checks_list.append(storage_account_checks_json)   
+    
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        return ex.message
+
+    finally:
+        print(storage_account_checks_list)
+        return render_template("compliancecheck.html", compliancecheck_details = storage_account_checks_list)
+    
+                                                         
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
 
     try:
-        global query_data_subscription 
-        query_data_subscription = request.form['subscription']
+
         subscription_details={}
         resource_by_type = []
         resource_by_location = []

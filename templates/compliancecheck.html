@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        {% block head %}
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="centeralize-page">
+            {{compliancecheck_details}}
+              
+            </div>
+        </body>
+    </html>
