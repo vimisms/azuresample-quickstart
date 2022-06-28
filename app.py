@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from operator import concat
 from urllib import response
 import os
 import requests
@@ -88,6 +89,7 @@ def compliancecheck():
         
         storage_account_checks_json = {}
         storage_account_checks_list = []
+        storage_account_names = []
         stg_acct_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
@@ -96,6 +98,7 @@ def compliancecheck():
             if len(items['properties']['privateEndpointConnections']) == 0:
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_checks_json['Status'] = "Failed"
+                storage_account_checks_json['Resources'] = storage_account_names.append(items['name'])              
                 storage_account_checks_list.append(storage_account_checks_json)
                 
             else:
