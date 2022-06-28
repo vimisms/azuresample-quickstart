@@ -90,8 +90,9 @@ def compliancecheck():
         storage_account_pvt_json = {}
         storage_account_pub_json = {}
         storage_account_tls_json = {}
-        storage_account_enc_json = {}        
+        storage_account_enc_json = {}   
         storage_account_checks_list = []
+        resource_name = []
         
         stg_acct_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
         req_headers = {'Authorization': 'Bearer ' +
@@ -99,13 +100,18 @@ def compliancecheck():
         res_response = json.loads(requests.get(url=stg_acct_uri, headers=req_headers).text)
         for items in res_response['value']:
             if len(items['properties']['privateEndpointConnections']) == 0:
-                storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
-                storage_account_pvt_json['Status'] = "Failed"
-                storage_account_pvt_json['Resource'] = items['name']                             
-                storage_account_checks_list.append(storage_account_pvt_json.copy())                
+                if len(resource_name) == 0:
+                    storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+                    storage_account_pvt_json['Status'] = "Failed"
+                    storage_account_pvt_json['Resource'] = ",".join(resource_name.append(items['name']))
+                else:
+                    storage_account_pvt_json['Resource'] = ",".join(resource_name.append(items['name']))                                         
+                               
             else:
                 storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_pvt_json['Status'] = "Passed"
+                
+            storage_account_checks_list.append(storage_account_pvt_json.copy()) 
                 
                 
         for items in res_response['value']:
