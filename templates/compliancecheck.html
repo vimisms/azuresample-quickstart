@@ -22,7 +22,9 @@
                     {% for items in compliancecheck_details %}
                         <tr>
                             <td>{{items['ComplianceName']}}</td>
-                            <td>{{items['Status']}}</td>
+                            {% if items['Status'] == "Failed" %}
+                                <td background-color = "red"> {{ items['Status'] }} </td>
+                            {% endif %}
                             <td>{{items['Resource']}}</td>
                         </tr>
                     {% endfor %}

@@ -107,6 +107,7 @@ def compliancecheck():
                 storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_pvt_json['Status'] = "Passed"
                 storage_account_checks_list.append(storage_account_pvt_json.copy()) 
+                
         for items in res_response['value']:
             if items['properties']['minimumTlsVersion'] == "TLS1_2":
                 storage_account_tls_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
@@ -118,8 +119,19 @@ def compliancecheck():
                 storage_account_tls_json['Status'] = "Passed"
                 storage_account_checks_list.append(storage_account_tls_json.copy())  
                 
+        for items in res_response['value']:            
+            if items['properties']['encryption']['keySource'] == "Microsoft.Keyvault":
+                storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
+                storage_account_enc_json['Status'] = "Failed"
+                storage_account_enc_json['Resource'] = items['name']                             
+                storage_account_checks_list.append(storage_account_enc_json.copy())                
+            else:
+                storage_account_enc_json['ComplianceName'] = "All Storage accounts must have encryption"
+                storage_account_enc_json['Status'] = "Passed"
+                storage_account_checks_list.append(storage_account_enc_json.copy())
+                
         for items in res_response['value']:
-            if items['properties']['publicNetworkAccess'] == "Enabled" or items['properties']['networkAcls']['defaultAction']  == 'Allow':
+            if items['properties']['networkAcls']['defaultAction']  == 'Allow':
                 storage_account_pub_json['ComplianceName'] = "All Storage accounts must have publich access disabled"
                 storage_account_pub_json['Status'] = "Failed"
                 storage_account_pub_json['Resource'] = items['name']                             
@@ -131,16 +143,7 @@ def compliancecheck():
                 
         
         
-        for items in res_response['value']:            
-            if items['properties']['encryption']['keySource'] == "Microsoft.Keyvault":
-                storage_account_enc_json['ComplianceName'] = "All Storage accounts must have encryption"
-                storage_account_enc_json['Status'] = "Failed"
-                storage_account_enc_json['Resource'] = items['name']                             
-                storage_account_checks_list.append(storage_account_enc_json.copy())                
-            else:
-                storage_account_enc_json['ComplianceName'] = "All Storage accounts must have encryption"
-                storage_account_enc_json['Status'] = "Passed"
-                storage_account_checks_list.append(storage_account_enc_json.copy())
+        
             
     
     except ClientAuthenticationError as ex:
