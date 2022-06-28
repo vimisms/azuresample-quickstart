@@ -106,7 +106,17 @@ def compliancecheck():
             else:
                 storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_pvt_json['Status'] = "Passed"
-                storage_account_checks_list.append(storage_account_pvt_json.copy())   
+                storage_account_checks_list.append(storage_account_pvt_json.copy()) 
+        for items in res_response['value']:
+            if items['properties']['minimumTlsVersion'] == "TLS1_2":
+                storage_account_tls_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
+                storage_account_tls_json['Status'] = "Failed"
+                storage_account_tls_json['Resource'] = items['name']                             
+                storage_account_checks_list.append(storage_account_tls_json.copy())                
+            else:
+                storage_account_tls_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
+                storage_account_tls_json['Status'] = "Passed"
+                storage_account_checks_list.append(storage_account_tls_json.copy())  
                 
         for items in res_response['value']:
             if items['properties']['publicNetworkAccess'] == "Enabled" or items['properties']['networkAcls']['defaultAction']  == 'Allow':
@@ -119,16 +129,7 @@ def compliancecheck():
                 storage_account_pub_json['Status'] = "Passed"
                 storage_account_checks_list.append(storage_account_pub_json.copy())
                 
-        for items in res_response['value']:
-            if items['properties']['minimumTlsVersion'] == "TLS1_2":
-                storage_account_tls_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
-                storage_account_tls_json['Status'] = "Failed"
-                storage_account_tls_json['Resource'] = items['name']                             
-                storage_account_checks_list.append(storage_account_tls_json.copy())                
-            else:
-                storage_account_tls_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
-                storage_account_tls_json['Status'] = "Passed"
-                storage_account_checks_list.append(storage_account_tls_json.copy())
+        
         
         for items in res_response['value']:            
             if items['properties']['encryption']['keySource'] == "Microsoft.Keyvault":

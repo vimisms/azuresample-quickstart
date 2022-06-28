@@ -10,7 +10,27 @@
     </head>
     <body>
         <div class="centeralize-page">
-            {{compliancecheck_details}}
+            <table class = "table-data">
+                <thead>
+                    <tr>
+                        <th>Compliance Name</th>
+                        <th>Status</th>
+                        <th>Resource</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in compliancecheck_details %}
+                        <tr>
+                            <td>{{items['ComplianceName']}}</td>
+                            <td>{{items['Status']}}</td>
+                            <td>{{items['Resource']}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
               
             </div>
         </body>
