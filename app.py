@@ -100,19 +100,12 @@ def compliancecheck():
         res_response = json.loads(requests.get(url=stg_acct_uri, headers=req_headers).text)
         for items in res_response['value']:
             if len(items['properties']['privateEndpointConnections']) == 0:
-                if len(resource_name) == 0:
-                    storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
-                    storage_account_pvt_json['Status'] = "Failed"
-                    storage_account_pvt_json['Resource'] = ",".join(resource_name.append(items['name']))
-                else:
-                    storage_account_pvt_json['Resource'] = ",".join(resource_name.append(items['name']))                                         
-                               
-            else:
-                storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
-                storage_account_pvt_json['Status'] = "Passed"
-                
-            storage_account_checks_list.append(storage_account_pvt_json.copy()) 
-                
+                storage_account_pvt_json['Resource'] = resource_name.append(items['name'])
+        
+        storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+        storage_account_pvt_json['Status'] = "Failed"
+        storage_account_pvt_json['Resource'] = str(",".join(resource_name)) 
+        storage_account_checks_list.append(storage_account_pvt_json.copy())
                 
         for items in res_response['value']:
             if items['properties']['minimumTlsVersion'] == "TLS1_2":
