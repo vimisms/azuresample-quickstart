@@ -104,39 +104,58 @@ def compliancecheck():
         for items in res_response['value']:
             if len(items['properties']['privateEndpointConnections']) == 0:
                 resource_pvt_name.append(items['name'])
-        
-        storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
-        storage_account_pvt_json['Status'] = "Failed"
-        storage_account_pvt_json['Resource'] = str(",".join(resource_pvt_name)) 
-        storage_account_checks_list.append(storage_account_pvt_json.copy())
+        if len(resource_pvt_name) != 0:
+            storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+            storage_account_pvt_json['Status'] = "Failed"
+            storage_account_pvt_json['Resource'] = str(",".join(resource_pvt_name))
+            storage_account_checks_list.append(storage_account_pvt_json.copy())
+        else:
+            storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+            storage_account_pvt_json['Status'] = "Passed"
+            
                 
         for items in res_response['value']:
             if items['properties']['minimumTlsVersion'] != "TLS1_2":
                 resource_tls_name.append(items['name'])
-        storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
-        storage_account_tls_json['Status'] = "Failed"
-        storage_account_tls_json['Resource'] = str(",".join(resource_tls_name)) 
-        storage_account_checks_list.append(storage_account_tls_json.copy())              
+        
+        if len(resource_tls_name) != 0:
+            storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
+            storage_account_tls_json['Status'] = "Failed"
+            storage_account_tls_json['Resource'] = str(",".join(resource_tls_name))
+            storage_account_checks_list.append(storage_account_tls_json.copy())
+        else:
+            storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
+            storage_account_tls_json['Status'] = "Passed"
+                       
                  
                 
         for items in res_response['value']:            
-            if items['properties']['encryption']['keySource'] == "Microsoft.Keyvault":
+            if items['properties']['encryption']['keySource'] != "Microsoft.Keyvault":
                 resource_enc_name.append(items['name'])
-                   
-        storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
-        storage_account_enc_json['Status'] = "Failed"
-        storage_account_enc_json['Resource'] = str(",".join(resource_enc_name)) 
-        storage_account_checks_list.append(storage_account_enc_json.copy())                                        
-                   
+        
+        if len(resource_enc_name) != 0:
+            storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
+            storage_account_enc_json['Status'] = "Failed"
+            storage_account_enc_json['Resource'] = str(",".join(resource_enc_name))
+            storage_account_checks_list.append(storage_account_enc_json.copy())                                        
+        else:
+            storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
+            storage_account_enc_json['Status'] = "Passed"
+            
                 
         for items in res_response['value']:
             if items['properties']['networkAcls']['defaultAction']  == 'Allow':
                 resource_pub_name.append(items['name'])
                    
-        storage_account_pub_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
-        storage_account_pub_json['Status'] = "Failed"
-        storage_account_pub_json['Resource'] = str(",".join(resource_pub_name)) 
-        storage_account_checks_list.append(storage_account_pub_json.copy()) 
+        if len(resource_pub_name) != 0:
+            storage_account_pub_json['ComplianceName'] = "All Storage accounts must have public network disabled"
+            storage_account_pub_json['Status'] = "Failed"
+            storage_account_pub_json['Resource'] = str(",".join(resource_pub_name))
+            storage_account_checks_list.append(storage_account_pub_json.copy()) 
+        else:
+            storage_account_pub_json['ComplianceName'] = "All Storage accounts must have public network disabled"
+            storage_account_pub_json['Status'] = "Passed"
+            
     
     except ClientAuthenticationError as ex:
         print(ex.message)
