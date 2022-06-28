@@ -23,13 +23,18 @@
                         <tr>
                             <td>{{items['ComplianceName']}}</td>
                             {% if items['Status'] == "Failed" %}
-                                <td background-color = "red"> {{ items['Status'] }} </td>
+                                <td> {{ items['Status'] }} </td>
                             {% endif %}
                             <td>{{items['Resource']}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <form action="/home" method = "post">
+                
+            
+                    <input type="submit" value="View Full Report">
+                </form>
             <div id="footer">
                 {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
             </div>
