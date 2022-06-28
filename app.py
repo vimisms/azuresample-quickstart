@@ -98,13 +98,41 @@ def compliancecheck():
             if len(items['properties']['privateEndpointConnections']) == 0:
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_checks_json['Status'] = "Failed"
-                storage_account_checks_json['Resources'] = storage_account_names.append(items['name'])              
-                storage_account_checks_list.append(storage_account_checks_json)
-                
+                storage_account_checks_json['Resource'] = items['name']                             
+                storage_account_checks_list.append(storage_account_checks_json.copy())                
             else:
                 storage_account_checks_json['ComplianceName'] = "All Storage accounts must have private end point connections"
                 storage_account_checks_json['Status'] = "Passed"
-                storage_account_checks_list.append(storage_account_checks_json)   
+                storage_account_checks_list.append(storage_account_checks_json.copy())   
+            if items['properties']['publicNetworkAccess'] == "Enabled":
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have publich access disabled"
+                storage_account_checks_json['Status'] = "Failed"
+                storage_account_checks_json['Resource'] = items['name']                             
+                storage_account_checks_list.append(storage_account_checks_json.copy())                
+            else:
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have publich access disabled"
+                storage_account_checks_json['Status'] = "Passed"
+                storage_account_checks_list.append(storage_account_checks_json.copy())
+            if items['properties']['minimumTlsVersion'] == "TLS1_2":
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
+                storage_account_checks_json['Status'] = "Failed"
+                storage_account_checks_json['Resource'] = items['name']                             
+                storage_account_checks_list.append(storage_account_checks_json.copy())                
+            else:
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have TLS 1.2"
+                storage_account_checks_json['Status'] = "Passed"
+                storage_account_checks_list.append(storage_account_checks_json.copy())
+            
+            if items['properties']['encryption']['requireInfrastructureEncryption'] == "false":
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have encryption"
+                storage_account_checks_json['Status'] = "Failed"
+                storage_account_checks_json['Resource'] = items['name']                             
+                storage_account_checks_list.append(storage_account_checks_json.copy())                
+            else:
+                storage_account_checks_json['ComplianceName'] = "All Storage accounts must have encryption"
+                storage_account_checks_json['Status'] = "Passed"
+                storage_account_checks_list.append(storage_account_checks_json.copy())
+            
     
     except ClientAuthenticationError as ex:
         print(ex.message)
