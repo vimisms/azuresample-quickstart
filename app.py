@@ -131,7 +131,7 @@ def compliancecheck():
                 storage_account_checks_list.append(storage_account_tls_json.copy())
         
         for items in res_response['value']:            
-            if items['properties']['encryption']['requireInfrastructureEncryption'] == "false":
+            if items['properties']['encryption']['keySource'] == "Microsoft.Keyvault":
                 storage_account_enc_json['ComplianceName'] = "All Storage accounts must have encryption"
                 storage_account_enc_json['Status'] = "Failed"
                 storage_account_enc_json['Resource'] = items['name']                             
