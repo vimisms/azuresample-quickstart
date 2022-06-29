@@ -100,6 +100,7 @@
                         <thead>
                             <tr>
                                 <th>Policy Assignment Name</th>
+                                <th>Policy Reference Name</th>
                                 <th>policyDefinitionAction</th>
                                 <th>Resource</th>
                                 <th>policySet Definition Category</th>
@@ -109,6 +110,7 @@
                             {% for items in policy[:5] %}
                                 <tr>
                                     <td>{{ items['policyAssignmentName'] }}</td>
+                                    <td>{{ items['policyDefinitionReferenceId'] }}</td>
                                     <td>{{ items['policyDefinitionAction'] }}</td>
                                     <td>{{ items['Resource'] }}</td>
                                     <td>{{ items['policySetDefinitionCategory'] }}</td>

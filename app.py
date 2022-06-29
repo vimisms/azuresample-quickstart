@@ -281,6 +281,7 @@ def home():
         for items in res_sub_policy['value']:
             if items['complianceState'] == 'NonCompliant':
                 data_sub_policy['policyAssignmentName'] = items['policyAssignmentName']
+                data_sub_policy['policyDefinitionReferenceId'] = items['policyDefinitionReferenceId']
                 data_sub_policy['policyDefinitionAction'] = items['policyDefinitionAction']
                 data_sub_policy['Resource'] = (
                     items['resourceId']).split("/")[-1]
