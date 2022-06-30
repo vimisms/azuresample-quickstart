@@ -563,7 +563,7 @@ def activitylogs():
                 data_sub_activity['OperationName']=items['operationName']['localizedValue']
                 data_sub_activity['Status']=items['status']['localizedValue']
                 data_sub_activity['EventTime']=items['eventTimestamp'] 
-                activity_Logs.append(data_sub_activity)             
+                activity_Logs.append(data_sub_activity.copy())             
     
         #print(activity_Logs)    
 
