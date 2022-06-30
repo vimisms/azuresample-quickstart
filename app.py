@@ -20,6 +20,7 @@ client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
 timeStamp = date.today()-timedelta(30)
+fulltimeStamp = date.today()-timedelta(90)
 ###Get token for resource manager API###
 
 mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/token"
@@ -541,6 +542,37 @@ def policynoncompliance():
     
     finally:
         return render_template("policynoncompliance.html", policy_details=sub_policy)
+    
+@app.route('/activitylogs', methods=['GET', 'POST'])
+def activitylogs():
+    data_sub_activity = {}
+    activity_Logs = []
+    try:
+        sub_activity_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '" + str(fulltimeStamp) +"'"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sub_activity = json.loads(requests.get(
+            url=sub_activity_uri, headers=req_headers).text)
+        if(len(res_sub_activity['value']) != 0):
+            for items in res_sub_activity['value']:
+                data_sub_activity['Action']=items['authorization']['action']
+                data_sub_activity['Caller']=items['caller']
+                data_sub_activity['Category']=items['category']['localizedValue']
+                data_sub_activity['ResourceId']=items['resourceId']
+                data_sub_activity['ResourceType']=items['resourceType']['localizedValue']
+                data_sub_activity['OperationName']=items['operationName']['localizedValue']
+                data_sub_activity['Status']=items['status']['localizedValue']
+                data_sub_activity['EventTime']=items['eventTimestamp'] 
+                activity_Logs.append(data_sub_activity)             
+    
+        #print(activity_Logs)    
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        return render_template("activitylogs.html", activity_logs = activity_Logs)
+    
         
 
 

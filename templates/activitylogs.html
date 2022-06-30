@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="bodyheader"> Azure Custom Compliance Portal
+        </div>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for logs..">
+            <table>
+                <thead>
+                    <thead>
+                        <tr>
+                            <th>
+                                Activity Type
+                            </th>
+                            <th>
+                                Caller
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                Resource ID
+                            </th>
+                            <th>
+                                Resource Type
+                            </th>
+                            <th>
+                                Operation
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Event Time Stamp
+                            </th>
+                        </tr>
+                    </thead>
+                </thead>
+                <tbody>
+                    {% for items in activity_logs %}
+                                <tr>
+                                    <td>
+                                        {{ items['Action'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['Caller'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['Category'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['ResourceId'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['ResourceType'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['OperationName'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['Status'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['EventTime'] }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                </tbody>
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
+        
+        
+    </body>
+</html>

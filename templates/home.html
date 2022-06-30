@@ -9,8 +9,7 @@
         {% endblock %}
     </head>
     <body>
-        <div id="bodyheader"> Azure Custom Compliance Portal
-        </div>
+        <div id="bodyheader">Azure Custom Compliance Portal</div>
         <div class="centeralize-page">
             <div>
                 {% for key in sub_details %}<p>{{ sub_details[key] }}</p>{% endfor %}
@@ -111,15 +110,21 @@
                                 <tr>
                                     <td>{{ items['policyAssignmentName'] }}</td>
                                     <td>{{ items['policyDefinitionReferenceId'] }}</td>
-                                    <td>{{ items['policyDefinitionAction'] }}</td>
-                                    <td>{{ items['Resource'] }}</td>
-                                    <td>{{ items['policySetDefinitionCategory'] }}</td>
+                                    <td>
+                                        {{ items['policyDefinitionAction'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['Resource'] }}
+                                    </td>
+                                    <td>
+                                        {{ items['policySetDefinitionCategory'] }}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                         <form action="/policynoncompliance" method = "post">
                             <input type="submit" value="View Full Policy Non Compliance">
-                            </form>
+                        </form>
                     </table>
                 {% endblock %}
             </div>
@@ -183,6 +188,7 @@
                     Azure Activity on Subscription
                 </div>
                 <div class="activitylog">
+                    
                     <table class = "widthtable">
                         <thead>
                             <tr>
@@ -242,6 +248,9 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
+                        <form action="/activitylogs" method = "post">
+                            <input type="submit" value="View 90 days logs">
+                        </form>
                     </table>
                 </div>
                 <div id="footer">
