@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="bodyheader"> Azure Custom Compliance Portal
+        </div>
+       
+            <table>
+                <thead>
+                    <tr>
+                        <th>Policy Assignment Name</th>
+                        <th>Policy Reference Name</th>
+                        <th>policyDefinitionAction</th>
+                        <th>Resource</th>
+                        <th>policySet Definition Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in policy_details %}
+                    <tr>
+                        <td>{{ items['policyAssignmentName'] }}</td>
+                        <td>{{ items['policyDefinitionReferenceId'] }}</td>
+                        <td>{{ items['policyDefinitionAction'] }}</td>
+                        <td>{{ items['Resource'] }}</td>
+                        <td>{{ items['policySetDefinitionCategory'] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
+        
+        
+    </body>
+</html>

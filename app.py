@@ -19,6 +19,7 @@ credential = DefaultAzureCredential()
 client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
+timeStamp = date.today()-timedelta(30)
 ###Get token for resource manager API###
 
 mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/token"
@@ -512,7 +513,35 @@ def rbac():
 
     except ClientAuthenticationError as ex:
         print(ex.message)
+        
 
+@app.route('/policynoncompliance', methods=['GET', 'POST'])
+def policynoncompliance():
+    data_sub_policy = {}
+    sub_policy = []
+    try:
+        sub_policy_state_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.PolicyInsights/policyStates/latest/queryResults?api-version=2019-10-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sub_policy = json.loads(requests.post(
+            url=sub_policy_state_uri, headers=req_headers).text)
+        # print(res_sub_policy)
+        for items in res_sub_policy['value']:
+            if items['complianceState'] == 'NonCompliant':
+                data_sub_policy['policyAssignmentName'] = items['policyAssignmentName']
+                data_sub_policy['policyDefinitionReferenceId'] = items['policyDefinitionReferenceId']
+                data_sub_policy['policyDefinitionAction'] = items['policyDefinitionAction']
+                data_sub_policy['Resource'] = (
+                    items['resourceId']).split("/")[-1]
+                data_sub_policy['policySetDefinitionCategory'] = items['policySetDefinitionCategory']
+                sub_policy.append(data_sub_policy.copy())
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+    
+    finally:
+        return render_template("policynoncompliance.html", policy_details=sub_policy)
+        
 
 
 if __name__ == '__main__':
