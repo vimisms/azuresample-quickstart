@@ -5,8 +5,8 @@ function searchActivity() {
     table = document.getElementById("activitylogtable");
     tr = table.getElementsByTagName("tr");
     console.log("Able to call JS");
-    searchCol = filter.split(";")[0];
-    searchtxt = filter.split(";")[1];
+    searchCol = filter.split(":")[0];
+    searchtxt = filter.split(":")[1];
     console.log(searchCol);
     console.log(searchtxt);
     console.log(tr.length);
