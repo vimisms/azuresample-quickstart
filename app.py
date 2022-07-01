@@ -20,7 +20,7 @@ client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
 timeStamp = date.today()-timedelta(30)
-fulltimeStamp = date.today()-timedelta(90)
+fulltimeStamp = date.today()-timedelta(88)
 ###Get token for resource manager API###
 
 mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/token"

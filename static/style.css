@@ -105,6 +105,12 @@ input {
     margin-bottom: auto;
 }
 
+#myInput {
+    width: 1000px;
+    border: 1px solid;
+    margin-bottom: 5px;
+}
+
 * {
     margin: 0;
     padding: 0;
