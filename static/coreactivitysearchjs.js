@@ -11,7 +11,7 @@ function searchActivity() {
     console.log(searchtxt);
     console.log(tr.length);
     for (i = 0; i < tr.length; i++) {
-        if (searchCol == "Activity") {
+        if (searchCol === "ACTIVITY") {
             td = tr[i].getElementsByTagName("td")[0];
             if (td) {
                 txtValue = td.textContent || td.innerText;
@@ -21,7 +21,7 @@ function searchActivity() {
                     tr[i].style.display = "none";
                 }
             }
-        } else if (searchCol == "Caller") {
+        } else if (searchCol === "CALLER") {
             td = tr[i].getElementsByTagName("td")[1];
             console.log("You selected caller filter")
             if (td) {
@@ -33,7 +33,7 @@ function searchActivity() {
                 }
             }
 
-        } else if (searchCol == "Category") {
+        } else if (searchCol === "CATEGORY") {
             td = tr[i].getElementsByTagName("td")[2];
             console.log("You selected category filter")
             if (td) {
@@ -45,7 +45,7 @@ function searchActivity() {
                 }
             }
 
-        } else if (searchCol == "Status") {
+        } else if (searchCol === "STATUS") {
             td = tr[i].getElementsByTagName("td")[6];
             console.log("You selected Status filter")
             if (td) {
