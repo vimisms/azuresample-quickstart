@@ -184,6 +184,7 @@ def compliancecheck():
             blob_diag_uri = "https://management.azure.com"+items['id']+"/blobServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
             req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = json.loads(requests.get(url=blob_diag_uri, headers=req_headers).text)
+            print(res_response)
             if len(res_response['value']) == 0:
                 blob_diag.append(items['name'])
                 
