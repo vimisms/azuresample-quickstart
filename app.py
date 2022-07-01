@@ -181,7 +181,7 @@ def compliancecheck():
             storage_account_checks_list.append(storage_account_diag_json.copy())    
             
         for items in res_response['value']:
-            blob_diag_uri = "https://management.azure.com"+items['id']+"/blobServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
+            blob_diag_uri = "https://management.azure.com"+items['id']+"/blobServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-09-01"
             req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = json.loads(requests.get(url=blob_diag_uri, headers=req_headers).text)
             print(res_response)
@@ -195,7 +195,7 @@ def compliancecheck():
             storage_account_checks_list.append(blob_diag_json.copy()) 
             
         for items in res_response['value']:
-            table_diag_uri = "https://management.azure.com"+items['id']+"/tableServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
+            table_diag_uri = "https://management.azure.com"+items['id']+"/tableServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-09-01"
             req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = json.loads(requests.get(url=table_diag_uri, headers=req_headers).text)
             if len(res_response['value']) == 0:
@@ -208,7 +208,7 @@ def compliancecheck():
             storage_account_checks_list.append(table_diag_json.copy())    
             
         for items in res_response['value']:
-            file_diag_uri = "https://management.azure.com"+items['id']+"/fileServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
+            file_diag_uri = "https://management.azure.com"+items['id']+"/fileServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-09-01"
             req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = json.loads(requests.get(url=file_diag_uri, headers=req_headers).text)
             if len(res_response['value']) == 0:
@@ -221,7 +221,7 @@ def compliancecheck():
             storage_account_checks_list.append(file_diag_json.copy()) 
             
         for items in res_response['value']:
-            queue_diag_uri = "https://management.azure.com"+items['id']+"/queueServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
+            queue_diag_uri = "https://management.azure.com"+items['id']+"/queueServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-09-01"
             req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
             res_response = json.loads(requests.get(url=queue_diag_uri, headers=req_headers).text)
             if len(res_response['value']) == 0:
