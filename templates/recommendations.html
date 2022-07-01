@@ -3,7 +3,7 @@
     <head>
         {% block head %}
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-        <script src="{{ url_for('static', filename='coreactivitysearchjs.js') }}"></script>
+        <script src="{{ url_for('static', filename='corerecomsearchjs.js') }}"></script>
             <title>
                 {% block title %}{% endblock %}
             - Azure Subscription Scanner</title>
@@ -12,8 +12,8 @@
     <body>
         <div id="bodyheader"> Azure Custom Compliance Portal
         </div>
-        <input type="text" id="logsearch" onkeyup="searchActivity()" placeholder="Search for logs..">
-        <table class = "widthtable">
+        <input type="text" id="recommendationssearch" onkeyup="searchRecommendations()" placeholder="Search for recommendations..">
+        <table class = "widthtable" id="recomtable">
             <thead>
                 <tr>
                     <th>

@@ -82,7 +82,7 @@ input {
 
 input[type=submit] {
     background-color: rgb(206, 239, 255);
-    border: 2px solid;
+    border: 1px solid;
     font-family: sans-serif;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -90,7 +90,7 @@ input[type=submit] {
     margin-right: auto;
     color: brown;
     padding: 5px;
-    shape-rendering: crispEdges;
+    border-radius: 2px;
 }
 
 #bodyheader {
