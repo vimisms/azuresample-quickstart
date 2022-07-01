@@ -93,6 +93,12 @@ input[type=submit] {
     border-radius: 2px;
 }
 
+input[type=text] {
+    width: 1000px;
+    box-sizing: border-box;
+    border: 1px;
+}
+
 #bodyheader {
     left: 0;
     right: 0;

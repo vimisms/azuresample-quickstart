@@ -1,4 +1,4 @@
-function searchActivity() {
+function searchRecommendations() {
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("recommendationssearch");
     filter = input.value.toUpperCase();
