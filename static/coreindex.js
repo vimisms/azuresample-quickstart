@@ -1,2 +1,2 @@
-var by_type = '{{ res_type | tojson } }';
+var by_type = '{{ res_type }}';
 alert(by_type);
