@@ -3,6 +3,10 @@
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
         <script src="{{ url_for('static', filename='coreindex.js') }}"></script>
+        <script>
+            var data = {{ res_type|tojson }};
+            alert(data);
+        </script>
         {% block head %}
             <title>
                 {% block title %}{% endblock %}
