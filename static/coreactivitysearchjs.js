@@ -15,7 +15,7 @@ function searchActivity() {
             td = tr[i].getElementsByTagName("td")[0];
             if (td) {
                 txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter.split(";")[1]) > -1) {
+                if (txtValue.toUpperCase().indexOf(filter.split(":")[1]) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -26,7 +26,7 @@ function searchActivity() {
             console.log("You selected caller filter")
             if (td) {
                 txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter.split(";")[1]) > -1) {
+                if (txtValue.toUpperCase().indexOf(filter.split(":")[1]) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -38,7 +38,7 @@ function searchActivity() {
             console.log("You selected category filter")
             if (td) {
                 txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter.split(";")[1]) > -1) {
+                if (txtValue.toUpperCase().indexOf(filter.split(":")[1]) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
@@ -50,7 +50,7 @@ function searchActivity() {
             console.log("You selected Status filter")
             if (td) {
                 txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter.split(";")[1]) > -1) {
+                if (txtValue.toUpperCase().indexOf(filter.split(":")[1]) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
