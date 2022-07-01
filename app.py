@@ -396,7 +396,8 @@ def home():
         print(ex.message)
         
     finally:
-        return render_template("home.html", sub_details = json.loads(json.dumps(subscription_details)),res_type=json.loads(json.dumps(data_by_type)), res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=sub_recom, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
+        
+        return render_template("home.html", sub_details = json.loads(json.dumps(subscription_details)),res_type=data_by_type, res_location=json.loads(json.dumps(data_by_location)), res_rbac=json.loads(json.dumps(data_rbac)), recommendations=sub_recom, policy=sub_policy,activity_logs = json.loads(json.dumps(activity_Logs)))
     
 
 
