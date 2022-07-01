@@ -9,7 +9,7 @@ function searchRecommendations() {
 
     for (i = 0; i < tr.length; i++) {
         if (searchCol === "IMPACT") {
-            td = tr[i].getElementsByTagName("td")[0];
+            td = tr[i].getElementsByTagName("td")[1];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter.split(":")[1]) > -1) {
@@ -20,7 +20,7 @@ function searchRecommendations() {
             }
 
         } else if (searchCol === "CATEGORY") {
-            td = tr[i].getElementsByTagName("td")[2];
+            td = tr[i].getElementsByTagName("td")[0];
             console.log("You selected category filter")
             if (td) {
                 txtValue = td.textContent || td.innerText;

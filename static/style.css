@@ -97,6 +97,7 @@ input[type=text] {
     width: 1000px;
     box-sizing: border-box;
     border: 1px;
+    height: 10px
 }
 
 #bodyheader {
