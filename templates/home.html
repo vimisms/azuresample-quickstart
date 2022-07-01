@@ -5,7 +5,7 @@
         <script src="{{ url_for('static', filename='coreindex.js') }}"></script>
         <script>
             var data = {{ res_type|tojson }};
-            alert(data);
+            alert(String(data));
         </script>
         {% block head %}
             <title>
