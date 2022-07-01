@@ -4,9 +4,9 @@ function searchActivity() {
     filter = input.value.toUpperCase();
     table = document.getElementById("activitylogtable");
     tr = table.getElementsByTagName("tr");
-
-    searchCol = filter.split(";")[0]
-    console.log(tr.length)
+    console.log("Able to call JS");
+    searchCol = filter.split(";")[0];
+    console.log(tr.length);
     for (i = 0; i < tr.length; i++) {
         if (searchCol == "Activity Type") {
             td = tr[i].getElementsByTagName("td")[0];
