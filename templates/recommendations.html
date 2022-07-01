@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        <script src="{{ url_for('static', filename='coreactivitysearchjs.js') }}"></script>
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="bodyheader"> Azure Custom Compliance Portal
+        </div>
+        <input type="text" id="logsearch" onkeyup="searchActivity()" placeholder="Search for logs..">
+        <table class = "widthtable">
+            <thead>
+                <tr>
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Impact
+                    </th>
+                    <th>
+                        Impacted Field
+                    </th>
+                    <th>
+                        Impacted Value
+                    </th>
+                    <th>
+                        Problem
+                    </th>
+                    <th>
+                        Solution
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in recommendations %}
+                    <tr>
+                        <td>
+                            {{ items['category'] }}
+                        </td>
+                        <td>
+                            {{ items['impact'] }}
+                        </td>
+                        <td>
+                            {{ items['impactedField'] }}
+                        </td>
+                        <td>
+                            {{ items['impactedValue'] }}
+                        </td>
+                        <td>
+                            {{ items['problem'] }}
+                        </td>
+                        <td>
+                            {{ items['solution'] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            <div id="footer">
+                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
+            </div>
+        
+        
+    </body>
+</html>

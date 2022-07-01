@@ -81,13 +81,16 @@ input {
 }
 
 input[type=submit] {
-    background-color: rgb(0, 162, 255);
+    background-color: rgb(206, 239, 255);
     border: 2px solid;
     font-family: sans-serif;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
+    color: brown;
+    padding: 5px;
+    shape-rendering: crispEdges;
 }
 
 #bodyheader {

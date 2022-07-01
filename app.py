@@ -573,6 +573,37 @@ def activitylogs():
     finally:
         return render_template("activitylogs.html", activity_logs = activity_Logs)
     
+@app.route('/recommendations', methods=['GET', 'POST'])
+def recommendations():
+    try:
+        sub_recom_json = {}
+        sub_recom= []
+        
+        sub_recommendation_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Advisor/recommendations?api-version=2020-01-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sub_recommendations = json.loads(requests.get(
+            url=sub_recommendation_uri, headers=req_headers).text)
+        if(len(res_sub_recommendations['value']) == 0):
+            recommendations = "Congrats !!! your subscription has no Advisor Recommendations"
+            #print(recommendations)
+
+        else:
+            for items in res_sub_recommendations['value']:
+                sub_recom_json['category'] = items['properties']['category']
+                sub_recom_json['impact'] = items['properties']['impact']
+                sub_recom_json['impactedField'] = items['properties']['impactedField']
+                sub_recom_json['impactedValue'] = items['properties']['impactedValue']
+                sub_recom_json['problem'] = items['properties']['shortDescription']['problem']
+                sub_recom_json['solution'] = items['properties']['shortDescription']['solution']
+                sub_recom.append(sub_recom_json.copy())
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        return render_template("recommendations.html", recommendations = sub_recom)
+    
         
 
 
