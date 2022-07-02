@@ -710,7 +710,103 @@ def stgcompliance():
         
     finally:
         return render_template("stgcompliance.html", stg_compliance = storage_account_checks_list)
+    
+@app.route('/sqlcompliance', methods=['GET', 'POST'])
+def sqlcompliance():
+    try:
+        sql_pvt_json={}
+        sql_pvt=[]
+        sql_aad_json={}
+        sql_aad=[]
+        sql_pri_json={}
+        sql_pri=[]
+        sql_aadonly_json = {}
+        sql_aadonly=[]
+        sql_pub_json={}
+        sql_pub=[]
+        
+        sql_check_list=[]
+        sql_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Sql/servers?api-version=2020-11-01-preview"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sql = json.loads(requests.get(
+            url=sql_uri, headers=req_headers).text)
+        for items in res_sql['value']:
+            if len(items['properties']['privateEndpointConnections']) == 0:
+                sql_pvt.append(items['name'])
                 
+        if len(sql_pvt) != 0:
+            sql_pvt_json['ComplianceName'] = "All SQLs must have private end point connections"
+            sql_pvt_json['Status'] = "Failed"
+            sql_pvt_json['Resource'] = str(",".join(sql_pvt))
+            sql_check_list.append(sql_pvt_json.copy())
+        else:
+            sql_pvt_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
+            sql_pvt_json['Status'] = "Passed"
+                
+        
+                
+        for items in res_sql['value']:
+            if items['properties']['administrators']['azureADOnlyAuthentication'] != "true":
+                sql_aadonly.append(items['name'])
+                
+        if len(sql_aadonly) != 0:
+            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
+            sql_aadonly_json['Status'] = "Failed"
+            sql_aadonly_json['Resource'] = str(",".join(sql_aadonly))
+            sql_check_list.append(sql_aadonly_json.copy())
+        else:
+            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
+            sql_aadonly_json['Status'] = "Passed"
+        
+        for items in res_sql['value']:
+            if items['properties']['administrators']['administratorType'] != "ActiveDirectory":
+                sql_aad.append(items['name'])
+                
+        if len(sql_aad) != 0:
+            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
+            sql_aad_json['Status'] = "Failed"
+            sql_aad_json['Resource'] = str(",".join(sql_aad))
+            sql_check_list.append(sql_aad_json.copy())
+        else:
+            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
+            sql_aad_json['Status'] = "Passed"
+                
+        
+                
+        for items in res_sql['value']:
+            if items['properties']['administrators']['principalType'] != "Group":
+                sql_pri.append(items['name'])
+                
+        if len(sql_pri) != 0:
+            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
+            sql_pri_json['Status'] = "Failed"
+            sql_pri_json['Resource'] = str(",".join(sql_pri))
+            sql_check_list.append(sql_pri_json.copy())
+        else:
+            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
+            sql_pri_json['Status'] = "Passed"
+                
+        for items in res_sql['value']:
+            if items['properties']['publicNetworkAccess'] == "Enabled":
+                sql_pub.append(items['name'])
+                
+        if len(sql_pub) != 0:
+            sql_pub_json['ComplianceName'] = "All SQLs must have public network disabled"
+            sql_pub_json['Status'] = "Failed"
+            sql_pub_json['Resource'] = str(",".join(sql_pub))
+            sql_check_list.append(sql_pub_json.copy())
+        else:
+            sql_pub_json['ComplianceName'] = "All SQLs must have public network disabled"
+            sql_pub_json['Status'] = "Passed"          
+        
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        return render_template("stgcompliance.html", sql_compliance = sql_check_list)
+                
+        
             
     
              
