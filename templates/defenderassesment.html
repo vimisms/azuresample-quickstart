@@ -10,7 +10,7 @@
     </head>
     <body>
         <div id="bodyheader">Azure Custom Compliance Portal</div>
-        <div class = "centerheading">Defender Assesments by Resource</div>
+        
         <div class="nav_btns">
             <form action="/home" method = "post">
                 <input type="submit" value="View Full Report">
@@ -28,6 +28,7 @@
                 <input type="submit" value="View Key Vault Compliance">
             </form>
         </div>
+        <div class = "centerheading">Defender Assesments by Resource [Healthy]</div>
         <table style="margin-top:70px">
             <thead>
                 <tr>
@@ -46,6 +47,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class = "centerheading">Defender Assesments by Resource [Unhealthy]</div>
         <table style="margin-top:70px">
             <thead>
                 <tr>
