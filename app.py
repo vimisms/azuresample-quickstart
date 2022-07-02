@@ -761,7 +761,7 @@ def sqlcompliance():
         
         for items in res_sql['value']:
             if 'administrators' in (items['properties']).keys():
-                if items['properties']['administrators']['azureADOnlyAuthentication'] != 'true':
+                if 'azureADOnlyAuthentication' in (items['properties']['administrators']).keys() and items['properties']['administrators']['azureADOnlyAuthentication'] != 'true':
                     sql_aadonly.append(items['name'])
                 elif 'administrators' in (items['properties']).keys() and items['properties']['administrators']['principalType'] != "Group":
                     sql_pri.append(items['name'])

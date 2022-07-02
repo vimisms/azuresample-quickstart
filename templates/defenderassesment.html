@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        <script src="{{ url_for('static', filename='coreassesmentsearch.js') }}"></script>
         {% block head %}
             <title>
                 {% block title %}{% endblock %}
@@ -29,7 +30,8 @@
             </form>
         </div>
         <div class = "centerheading">Defender Assesments by Resource [Healthy]</div>
-        <table style="margin-top:70px">
+        <input type="text" id="defheasearch" onkeyup="searchHealthy()" placeholder="Search for assesment..">
+        <table style="margin-top:70px" id="defhealthy">
             <thead>
                 <tr>
                     <th>Resource Name</th>
@@ -48,7 +50,8 @@
             </tbody>
         </table>
         <div class = "centerheading">Defender Assesments by Resource [Unhealthy]</div>
-        <table style="margin-top:70px">
+        <input type="text" id="defunheasearch" onkeyup="searchUnHealthy()" placeholder="Search for assesment..">
+        <table style="margin-top:70px" id="defunhealthy">
             <thead>
                 <tr>
                     <th>Resource Name</th>
