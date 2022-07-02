@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        {% block head %}
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="bodyheader"> Azure Custom Compliance Portal
+        </div>
+            <table style="margin-top:70px">
+                <thead>
+                    <tr>
+                        <th>Compliance Name</th>
+                        <th>Status</th>
+                        <th>Resource</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in stg_compliance %}
+                        <tr>
+                            <td>{{ items['ComplianceName'] }}</td>
+                            {% if items['Status'] == "Failed" %}<td>{{ items['Status'] }}</td>{% endif %}
+                            <td>{{ items['Resource'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+           
+            
+        
+    </body>
+</html>

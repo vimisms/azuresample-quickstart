@@ -111,6 +111,14 @@ input[type=text] {
     font-size: 20px;
 }
 
+.nav_btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    align-items: stretch;
+}
+
 #managementgroup {
     margin-left: auto;
     margin-right: auto;

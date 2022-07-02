@@ -555,7 +555,167 @@ def recommendations():
     finally:
         return render_template("recommendations.html", recommendations = sub_recom)
     
+@app.route('/stgcompliance', methods=['GET', 'POST'])
+def stgcompliance():
         
+    try:
+        global query_data_subscription 
+        query_data_subscription = request.form['subscription']
+        
+        storage_account_pvt_json = {}
+        storage_account_pub_json = {}
+        storage_account_tls_json = {}
+        storage_account_enc_json = {}   
+        storage_account_diag_json = {}
+        blob_diag_json = {}
+        table_diag_json = {}
+        file_diag_json = {}
+        queue_diag_json = {}
+        storage_account_checks_list = []
+        resource_pvt_name = []
+        resource_tls_name = []
+        resource_enc_name = []
+        resource_pub_name = []
+        stg_diag = []
+        blob_diag = []
+        que_diag = []
+        file_diag = []
+        table_diag = []
+        stg_acct_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_response = json.loads(requests.get(url=stg_acct_uri, headers=req_headers).text)
+        for items in res_response['value']:
+            if len(items['properties']['privateEndpointConnections']) == 0:
+                resource_pvt_name.append(items['name'])
+        if len(resource_pvt_name) != 0:
+            storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+            storage_account_pvt_json['Status'] = "Failed"
+            storage_account_pvt_json['Resource'] = str(",".join(resource_pvt_name))
+            storage_account_checks_list.append(storage_account_pvt_json.copy())
+        else:
+            storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
+            storage_account_pvt_json['Status'] = "Passed"
+            
+                
+        for items in res_response['value']:
+            if items['properties']['minimumTlsVersion'] != "TLS1_2":
+                resource_tls_name.append(items['name'])
+        
+        if len(resource_tls_name) != 0:
+            storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
+            storage_account_tls_json['Status'] = "Failed"
+            storage_account_tls_json['Resource'] = str(",".join(resource_tls_name))
+            storage_account_checks_list.append(storage_account_tls_json.copy())
+        else:
+            storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
+            storage_account_tls_json['Status'] = "Passed"
+                       
+                 
+                
+        for items in res_response['value']:            
+            if items['properties']['encryption']['keySource'] != "Microsoft.Keyvault":
+                resource_enc_name.append(items['name'])
+        
+        if len(resource_enc_name) != 0:
+            storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
+            storage_account_enc_json['Status'] = "Failed"
+            storage_account_enc_json['Resource'] = str(",".join(resource_enc_name))
+            storage_account_checks_list.append(storage_account_enc_json.copy())                                        
+        else:
+            storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
+            storage_account_enc_json['Status'] = "Passed"
+            
+                
+        for items in res_response['value']:
+            if items['properties']['networkAcls']['defaultAction']  == 'Allow':
+                resource_pub_name.append(items['name'])
+                   
+        if len(resource_pub_name) != 0:
+            storage_account_pub_json['ComplianceName'] = "All Storage accounts must have public network disabled"
+            storage_account_pub_json['Status'] = "Failed"
+            storage_account_pub_json['Resource'] = str(",".join(resource_pub_name))
+            storage_account_checks_list.append(storage_account_pub_json.copy()) 
+        else:
+            storage_account_pub_json['ComplianceName'] = "All Storage accounts must have public network disabled"
+            storage_account_pub_json['Status'] = "Passed"
+            
+        for items in res_response['value']:
+            stg_diag_uri = "https://management.azure.com"+items['id']+"/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
+            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = json.loads(requests.get(url=stg_diag_uri, headers=req_headers).text)
+            if len(res_response['value']) == 0:
+                stg_diag.append(items['name'])
+                
+        if len(stg_diag) != 0:
+            storage_account_diag_json['ComplianceName'] = "All Storage accounts must have diagnostic enabled"
+            storage_account_diag_json['Status'] = "Failed"
+            storage_account_diag_json['Resource'] = str(",".join(stg_diag))
+            storage_account_checks_list.append(storage_account_diag_json.copy())    
+            
+        for items in res_response['value']:
+            blob_diag_uri = "https://management.azure.com"+items['id']+"/blobServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=api-version=2021-05-01-preview"
+            print(blob_diag_uri)
+            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = json.loads(requests.get(url=blob_diag_uri, headers=req_headers).text)
+            print(res_response)
+            if len(res_response['value']) == 0:
+                blob_diag.append(items['name'])
+                
+        if len(blob_diag) != 0:
+            blob_diag_json['ComplianceName'] = "All Storage accounts BLOB Service must have diagnostic enabled"
+            blob_diag_json['Status'] = "Failed"
+            blob_diag_json['Resource'] = str(",".join(blob_diag))
+            storage_account_checks_list.append(blob_diag_json.copy()) 
+            
+        for items in res_response['value']:
+            table_diag_uri = "https://management.azure.com"+items['id']+"/tableServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=api-version=2021-05-01-preview"
+            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = json.loads(requests.get(url=table_diag_uri, headers=req_headers).text)
+            if len(res_response['value']) == 0:
+                table_diag.append(items['name'])
+                
+        if len(table_diag) != 0:
+            table_diag_json['ComplianceName'] = "All Storage accounts TABLE Service must have diagnostic enabled"
+            table_diag_json['Status'] = "Failed"
+            table_diag_json['Resource'] = str(",".join(table_diag))
+            storage_account_checks_list.append(table_diag_json.copy())    
+            
+        for items in res_response['value']:
+            file_diag_uri = "https://management.azure.com"+items['id']+"/fileServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=api-version=2021-05-01-preview"
+            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = json.loads(requests.get(url=file_diag_uri, headers=req_headers).text)
+            if len(res_response['value']) == 0:
+                file_diag.append(items['name'])
+                
+        if len(file_diag) != 0:
+            file_diag_json['ComplianceName'] = "All Storage accounts FILE Service must have diagnostic enabled"
+            file_diag_json['Status'] = "Failed"
+            file_diag_json['Resource'] = str(",".join(file_diag))
+            storage_account_checks_list.append(file_diag_json.copy()) 
+            
+        for items in res_response['value']:
+            queue_diag_uri = "https://management.azure.com"+items['id']+"/queueServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-09-01"
+            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+            res_response = json.loads(requests.get(url=queue_diag_uri, headers=req_headers).text)
+            if len(res_response['value']) == 0:
+                que_diag.append(items['name'])
+                
+        if len(que_diag) != 0:
+            queue_diag_json['ComplianceName'] = "All Storage accounts FILE Service must have diagnostic enabled"
+            queue_diag_json['Status'] = "Failed"
+            queue_diag_json['Resource'] = str(",".join(que_diag))
+            storage_account_checks_list.append(queue_diag_json.copy())
+            
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        return render_template("stgcompliance.html", stg_compliance = storage_account_checks_list)
+                
+            
+    
+             
 
 
 if __name__ == '__main__':

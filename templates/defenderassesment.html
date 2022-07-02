@@ -9,51 +9,64 @@
         {% endblock %}
     </head>
     <body>
-        <div id="bodyheader"> Azure Custom Compliance Portal
-        </div>
-            <table style="margin-top:70px">
-                <thead>
-                    <tr>
-                        <th>Resource Name</th>
-                        <th>Rule</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for items in assesment_unhealthy %}
-                        <tr>
-                            <td>{{ items['Resource'] }}</td>
-                            <td>{{ items['Rule'] }}</td>
-                            <td>{{ items['Status'] }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <table style="margin-top:70px">
-                <thead>
-                    <tr>
-                        <th>Resource Name</th>
-                        <th>Rule</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for items in assesment_healthy %}
-                        <tr>
-                            <td>{{ items['Resource'] }}</td>
-                            <td>{{ items['Rule'] }}</td>
-                            <td>{{ items['Status'] }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div id="bodyheader">Azure Custom Compliance Portal</div>
+        <div class="nav_btns">
             <form action="/home" method = "post">
-                <input type="submit" value="View Full Report" style="margin-left:auto; margin-right:auto">
+                <input type="submit" value="View Full Report">
             </form>
-            <div id="footer">
-                {% block footer %}&copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.{% endblock %}
-            </div>
-        
+            <form action="/stgcompliance" method = "post">
+                <input type="submit" value="View Storage Accout Compliance" >
+            </form>
+            <form action="/syncompliance" method = "post">
+                <input type="submit" value="View Synapse Compliance">
+            </form>
+            <form action="/sqlcompliance" method = "post">
+                <input type="submit" value="View SQL Compliance">
+            </form>
+            <form action="/kvcompliance" method = "post">
+                <input type="submit" value="View Key Vault Compliance">
+            </form>
+        </div>
+        <table style="margin-top:70px">
+            <thead>
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Rule</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in assesment_unhealthy %}
+                    <tr>
+                        <td>{{ items['Resource'] }}</td>
+                        <td>{{ items['Rule'] }}</td>
+                        <td>{{ items['Status'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table style="margin-top:70px">
+            <thead>
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Rule</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in assesment_healthy %}
+                    <tr>
+                        <td>{{ items['Resource'] }}</td>
+                        <td>{{ items['Rule'] }}</td>
+                        <td>{{ items['Status'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="/home" method = "post">
+            <input type="submit"
+                   value="View Full Report"
+                   style="margin-left:auto; margin-right:auto">
+        </form>
     </body>
 </html>
