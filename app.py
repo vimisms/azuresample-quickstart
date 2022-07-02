@@ -744,49 +744,6 @@ def sqlcompliance():
             sql_pvt_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
             sql_pvt_json['Status'] = "Passed"
                 
-        
-                
-        for items in res_sql['value']:
-            if items['properties']['administrators']['azureADOnlyAuthentication'] != "true":
-                sql_aadonly.append(items['name'])
-                
-        if len(sql_aadonly) != 0:
-            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
-            sql_aadonly_json['Status'] = "Failed"
-            sql_aadonly_json['Resource'] = str(",".join(sql_aadonly))
-            sql_check_list.append(sql_aadonly_json.copy())
-        else:
-            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
-            sql_aadonly_json['Status'] = "Passed"
-        
-        for items in res_sql['value']:
-            if items['properties']['administrators']['administratorType'] != "ActiveDirectory":
-                sql_aad.append(items['name'])
-                
-        if len(sql_aad) != 0:
-            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
-            sql_aad_json['Status'] = "Failed"
-            sql_aad_json['Resource'] = str(",".join(sql_aad))
-            sql_check_list.append(sql_aad_json.copy())
-        else:
-            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
-            sql_aad_json['Status'] = "Passed"
-                
-        
-                
-        for items in res_sql['value']:
-            if items['properties']['administrators']['principalType'] != "Group":
-                sql_pri.append(items['name'])
-                
-        if len(sql_pri) != 0:
-            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
-            sql_pri_json['Status'] = "Failed"
-            sql_pri_json['Resource'] = str(",".join(sql_pri))
-            sql_check_list.append(sql_pri_json.copy())
-        else:
-            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
-            sql_pri_json['Status'] = "Passed"
-                
         for items in res_sql['value']:
             if items['properties']['publicNetworkAccess'] == "Enabled":
                 sql_pub.append(items['name'])
@@ -798,7 +755,49 @@ def sqlcompliance():
             sql_check_list.append(sql_pub_json.copy())
         else:
             sql_pub_json['ComplianceName'] = "All SQLs must have public network disabled"
-            sql_pub_json['Status'] = "Passed"          
+            sql_pub_json['Status'] = "Passed"  
+            
+        for items in res_sql['value']:
+            if 'administrators' in (items['properties']).keys() and items['properties']['administrators']['administratorType'] != "ActiveDirectory":
+                sql_aad.append(items['name'])
+                
+        if len(sql_aad) != 0:
+            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
+            sql_aad_json['Status'] = "Failed"
+            sql_aad_json['Resource'] = str(",".join(sql_aad))
+            sql_check_list.append(sql_aad_json.copy())
+        else:
+            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
+            sql_aad_json['Status'] = "Passed"
+        
+                
+        for items in res_sql['value']:
+            if 'administrators' in (items['properties']).keys() and items['properties']['administrators']['azureADOnlyAuthentication'] != 'true':
+                sql_aadonly.append(items['name'])
+                
+        if len(sql_aadonly) != 0:
+            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
+            sql_aadonly_json['Status'] = "Failed"
+            sql_aadonly_json['Resource'] = str(",".join(sql_aadonly))
+            sql_check_list.append(sql_aadonly_json.copy())
+        else:
+            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
+            sql_aadonly_json['Status'] = "Passed"                
+        
+                
+        for items in res_sql['value']:
+            if 'administrators' in (items['properties']).keys() and items['properties']['administrators']['principalType'] != "Group":
+                sql_pri.append(items['name'])
+                
+        if len(sql_pri) != 0:
+            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
+            sql_pri_json['Status'] = "Failed"
+            sql_pri_json['Resource'] = str(",".join(sql_pri))
+            sql_check_list.append(sql_pri_json.copy())
+        else:
+            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
+            sql_pri_json['Status'] = "Passed"
+                       
         
     except ClientAuthenticationError as ex:
         print(ex.message)
