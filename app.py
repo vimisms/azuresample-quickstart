@@ -724,6 +724,8 @@ def sqlcompliance():
         sql_aadonly=[]
         sql_pub_json={}
         sql_pub=[]
+        sql_auth_json={}
+        sql_auth=[]
         
         sql_check_list=[]
         sql_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Sql/servers?api-version=2020-11-01-preview"
@@ -756,48 +758,37 @@ def sqlcompliance():
         else:
             sql_pub_json['ComplianceName'] = "All SQLs must have public network disabled"
             sql_pub_json['Status'] = "Passed"  
-            
-        for items in res_sql['value']:
-            if 'administrators' in (items['properties']).keys() and items['properties']['administrators']['administratorType'] != "ActiveDirectory":
-                sql_aad.append(items['name'])
-                
-        if len(sql_aad) != 0:
-            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
-            sql_aad_json['Status'] = "Failed"
-            sql_aad_json['Resource'] = str(",".join(sql_aad))
-            sql_check_list.append(sql_aad_json.copy())
-        else:
-            sql_aad_json['ComplianceName'] = "All SQLs must have AAD authentication enalbed"
-            sql_aad_json['Status'] = "Passed"
         
-                
         for items in res_sql['value']:
-            if 'administrators' in (items['properties']).keys() and items['properties']['administrators']['azureADOnlyAuthentication'] != 'true':
-                sql_aadonly.append(items['name'])
-                
+            if 'administrators' in (items['properties']).keys():
+                if items['properties']['administrators']['azureADOnlyAuthentication'] != 'true':
+                    sql_aadonly.append(items['name'])
+                elif 'administrators' in (items['properties']).keys() and items['properties']['administrators']['principalType'] != "Group":
+                    sql_pri.append(items['name'])
+                elif 'administrators' in (items['properties']).keys() and items['properties']['administrators']['administratorType'] != "ActiveDirectory":
+                    sql_aad.append(items['name'])
+            else:
+                sql_auth.append(items['name'])
+        
+        if len(sql_auth) != 0:
+            sql_auth_json['ComplianceName'] = "All SQLs must have AD authentication enabled"
+            sql_auth_json['Status'] = "Failed"
+            sql_auth_json['Resource'] = str(",".join(sql_auth))
+            sql_check_list.append(sql_auth_json.copy())
+        
         if len(sql_aadonly) != 0:
-            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
+            sql_aadonly_json['ComplianceName'] = "All SQLs must have only AAD authentication"
             sql_aadonly_json['Status'] = "Failed"
             sql_aadonly_json['Resource'] = str(",".join(sql_aadonly))
             sql_check_list.append(sql_aadonly_json.copy())
-        else:
-            sql_aadonly_json['ComplianceName'] = "All SQLs must have AAD authentication only"
-            sql_aadonly_json['Status'] = "Passed"                
-        
-                
-        for items in res_sql['value']:
-            if 'administrators' in (items['properties']).keys() and items['properties']['administrators']['principalType'] != "Group":
-                sql_pri.append(items['name'])
-                
+            
         if len(sql_pri) != 0:
-            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
+            sql_pri_json['ComplianceName'] = "All SQLs must have AD group as Active directory owner"
             sql_pri_json['Status'] = "Failed"
             sql_pri_json['Resource'] = str(",".join(sql_pri))
             sql_check_list.append(sql_pri_json.copy())
-        else:
-            sql_pri_json['ComplianceName'] = "All SQLs must have Group as active directory admins"
-            sql_pri_json['Status'] = "Passed"
-                       
+               
+                                     
         
     except ClientAuthenticationError as ex:
         print(ex.message)
