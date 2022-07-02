@@ -559,9 +559,7 @@ def recommendations():
 def stgcompliance():
         
     try:
-        global query_data_subscription 
-        query_data_subscription = request.form['subscription']
-        
+               
         storage_account_pvt_json = {}
         storage_account_pub_json = {}
         storage_account_tls_json = {}
