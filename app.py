@@ -804,6 +804,7 @@ def sqlcompliance():
         print(ex.message)
         
     finally:
+        print(sql_check_list)
         return render_template("stgcompliance.html", sql_compliance = sql_check_list)
                 
         
