@@ -796,6 +796,103 @@ def sqlcompliance():
     finally:
         print(sql_check_list)
         return render_template("sqlcompliance.html", sql_compliance = sql_check_list)
+    
+
+@app.route('/kvcompliance', methods=['GET', 'POST'])
+def kvcompliance():
+    try:
+        kv_pub_json={}
+        kv_pub=[]
+        kv_rbac_json={}
+        kv_rbac=[]
+        kv_sd_json={}
+        kv_sd=[]
+        kv_pp_json = {}
+        kv_pp=[]
+        kv_sku_json={}
+        kv_sku=[]
+        
+        
+        kv_check_list=[]
+        kv_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.KeyVault/vaults?api-version=2021-10-01"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_kv = json.loads(requests.get(
+            url=kv_uri, headers=req_headers).text)
+        for items in res_kv['value']:
+            if len(items['properties']['publicNetworkAccess']) == 'Enabled':
+                kv_pub.append(items['name'])
+                
+        if len(kv_pub) != 0:
+            kv_pub_json['ComplianceName'] = "All Key Vaults must have public network disabled"
+            kv_pub_json['Status'] = "Failed"
+            kv_pub_json['Resource'] = str(",".join(kv_pub))
+            kv_check_list.append(kv_pub_json.copy())
+        else:
+            kv_pub_json['ComplianceName'] = "All Key Vaults must have public network disabled"
+            kv_pub_json['Status'] = "Passed"
+                
+        for items in res_kv['value']:
+            if items['properties']['enableRbacAuthorization'] == "false":
+                kv_rbac.append(items['name'])
+                
+        if len(kv_rbac) != 0:
+            kv_rbac_json['ComplianceName'] = "All Key Vaults must have RBAC enabled"
+            kv_rbac_json['Status'] = "Failed"
+            kv_rbac_json['Resource'] = str(",".join(kv_rbac))
+            kv_check_list.append(kv_rbac_json.copy())
+        else:
+            kv_rbac_json['ComplianceName'] = "All Key Vaults must have RBAC enabled"
+            kv_rbac_json['Status'] = "Passed"  
+            
+        for items in res_kv['value']:
+            if items['properties']['enableSoftDelete'] != "true":
+                kv_sd.append(items['name'])
+                
+        if len(kv_sd) != 0:
+            kv_sd_json['ComplianceName'] = "All Key Vaults must have Soft Delete enabled"
+            kv_sd_json['Status'] = "Failed"
+            kv_sd_json['Resource'] = str(",".join(kv_sd))
+            kv_check_list.append(kv_sd_json.copy())
+        else:
+            kv_sd_json['ComplianceName'] = "All Key Vaults must have Soft Delete enabled"
+            kv_sd_json['Status'] = "Passed" 
+        
+        for items in res_kv['value']:
+            if items['properties']['enablePurgeProtection'] != "true":
+                kv_pp.append(items['name'])
+                
+        if len(kv_pp) != 0:
+            kv_pp_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
+            kv_pp_json['Status'] = "Failed"
+            kv_pp_json['Resource'] = str(",".join(kv_pp))
+            kv_check_list.append(kv_pp_json.copy())
+        else:
+            kv_pp_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
+            kv_pp_json['Status'] = "Passed" 
+            
+        for items in res_kv['value']:
+            if items['properties']['sku']['name'] != "Premium":
+                kv_sku.append(items['name'])
+                
+        if len(kv_sku) != 0:
+            kv_sku_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
+            kv_sku_json['Status'] = "Failed"
+            kv_sku_json['Resource'] = str(",".join(kv_sku))
+            kv_check_list.append(kv_sku_json.copy())
+        else:
+            kv_sku_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
+            kv_sku_json['Status'] = "Passed"
+        
+               
+                                     
+        
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        
+        return render_template("kvcompliance.html", kv_compliance = kv_check_list)
                 
         
             
