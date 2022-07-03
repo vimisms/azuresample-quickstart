@@ -820,7 +820,7 @@ def kvcompliance():
         res_kv = json.loads(requests.get(
             url=kv_uri, headers=req_headers).text)
         for items in res_kv['value']:
-            if len(items['properties']['publicNetworkAccess']) == 'Enabled':
+            if items['properties']['publicNetworkAccess'] == 'Enabled':
                 kv_pub.append(items['name'])
                 
         if len(kv_pub) != 0:
@@ -833,7 +833,7 @@ def kvcompliance():
             kv_pub_json['Status'] = "Passed"
                 
         for items in res_kv['value']:
-            if items['properties']['enableRbacAuthorization'] == "false":
+            if items['properties']['enableRbacAuthorization'] == False:
                 kv_rbac.append(items['name'])
                 
         if len(kv_rbac) != 0:
@@ -846,7 +846,7 @@ def kvcompliance():
             kv_rbac_json['Status'] = "Passed"  
             
         for items in res_kv['value']:
-            if items['properties']['enableSoftDelete'] != "true":
+            if items['properties']['enableSoftDelete'] == False:
                 kv_sd.append(items['name'])
                 
         if len(kv_sd) != 0:
@@ -859,7 +859,7 @@ def kvcompliance():
             kv_sd_json['Status'] = "Passed" 
         
         for items in res_kv['value']:
-            if items['properties']['enablePurgeProtection'] != "true":
+            if items['properties']['enablePurgeProtection'] == False:
                 kv_pp.append(items['name'])
                 
         if len(kv_pp) != 0:
@@ -876,12 +876,12 @@ def kvcompliance():
                 kv_sku.append(items['name'])
                 
         if len(kv_sku) != 0:
-            kv_sku_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
+            kv_sku_json['ComplianceName'] = "All Key Vaults must have premium SKU"
             kv_sku_json['Status'] = "Failed"
             kv_sku_json['Resource'] = str(",".join(kv_sku))
             kv_check_list.append(kv_sku_json.copy())
         else:
-            kv_sku_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
+            kv_sku_json['ComplianceName'] = "All Key Vaults must have premium SKU"
             kv_sku_json['Status'] = "Passed"
         
                
