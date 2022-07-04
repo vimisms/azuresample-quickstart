@@ -255,9 +255,8 @@ def home():
                 data_sub_activity['Action']=items['authorization']['action']
                 data_sub_activity['Caller']=items['caller']
                 data_sub_activity['Category']=items['category']['localizedValue']
-                data_sub_activity['ResourceId']=items['resourceId']
+                data_sub_activity['Resource']=(items['resourceId']).split("/")[-1]
                 data_sub_activity['ResourceType']=items['resourceType']['localizedValue']
-                data_sub_activity['OperationName']=items['operationName']['localizedValue']
                 data_sub_activity['Status']=items['status']['localizedValue']
                 data_sub_activity['EventTime']=items['eventTimestamp'] 
                 activity_Logs.append(data_sub_activity)             
@@ -511,7 +510,6 @@ def activitylogs():
                 data_sub_activity['Category']=items['category']['localizedValue']
                 data_sub_activity['Resource']=(items['resourceId']).split("/")[-1]
                 data_sub_activity['ResourceType']=items['resourceType']['localizedValue']
-                data_sub_activity['OperationName']=items['operationName']['localizedValue']
                 data_sub_activity['Status']=items['status']['localizedValue']
                 data_sub_activity['EventTime']=items['eventTimestamp'] 
                 activity_Logs.append(data_sub_activity.copy())             
