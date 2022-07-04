@@ -553,6 +553,37 @@ def recommendations():
     finally:
         return render_template("recommendations.html", recommendations = sub_recom)
     
+@app.route('/policyexemptions', methods=['GET', 'POST'])
+def policyexemptions():
+    try:
+        sub_exempt_json = {}
+        sub_exempt= []
+        
+        sub_exempt_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Authorization/policyExemptions?api-version=2020-07-01-preview"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sub_exempt = json.loads(requests.get(
+            url=sub_exempt_uri, headers=req_headers).text)
+        if(len(res_sub_exempt['value']) == 0):
+            sub_exempt = "Congrats !!! your subscription has no exemptions"
+            #print(recommendations)
+
+        else:
+            for items in res_sub_exempt['value']:
+                sub_exempt_json['Policy'] = (items['properties']['policyAssignmentId']).split('/')[-1]
+                sub_exempt_json['exemptionCategory'] = items['properties']['exemptionCategory']
+                sub_exempt_json['displayName'] = items['properties']['displayName']
+                sub_exempt_json['createdBy'] = items['systemData']['createdBy']
+                sub_exempt_json['createdAt'] = items['systemData']['createdAt']
+            
+                sub_exempt.append(sub_exempt_json.copy())
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        return render_template("policyexemptions.html", exemptions = sub_exempt)
+    
 @app.route('/stgcompliance', methods=['GET', 'POST'])
 def stgcompliance():
         

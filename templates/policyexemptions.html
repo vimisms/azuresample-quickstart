@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        {% block head %}
+            <title>
+                {% block title %}{% endblock %}
+            - Azure Subscription Scanner</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="bodyheader"> Azure Custom Compliance Portal
+        </div>
+        <div class = "centerheading">Storage Compliance</div>
+            <table style="margin-top:70px">
+                <thead>
+                    <tr>
+                        <th>Policy</th>
+                        <th>Exemption Category</th>
+                        <th>Display Name</th>
+                        <th>Created By</th>
+                        <th>Creation Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for items in exemptions %}
+                        <tr>
+                            <td>{{ items['Policy'] }}</td>
+                            <td>{{ items['exemptionCategory'] }}</td>
+                            <td>{{ items['displayName'] }}</td>
+                            <td>{{ items['createdBy'] }}</td>
+                            <td>{{ items['createdAt'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+           
+            
+        
+    </body>
+</html>
