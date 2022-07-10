@@ -214,7 +214,10 @@ def home():
             for items in res_sub_recommendations['value']:
                 sub_recom_json['category'] = items['properties']['category']
                 sub_recom_json['impact'] = items['properties']['impact']
-                sub_recom_json['impactedField'] = items['properties']['impactedField']
+                if 'impactedField' in (items['properties']).keys():
+                    sub_recom_json['impactedField'] = items['properties']['impactedField']
+                else:
+                    sub_recom_json['impactedField'] = ""
                 sub_recom_json['impactedValue'] = items['properties']['impactedValue']
                 sub_recom_json['problem'] = items['properties']['shortDescription']['problem']
                 sub_recom_json['solution'] = items['properties']['shortDescription']['solution']
@@ -498,21 +501,21 @@ def activitylogs():
     data_sub_activity = {}
     activity_Logs = []
     try:
-        sub_activity_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '" + str(fulltimeStamp) +"'"
+        sub_activity_uri = "https://management.azure.com/providers/Microsoft.Management/managementGroups/SHELLCORP-AZMG-TENANT-TC-DEV/providers/microsoft.insights/eventtypes/management/values"
         req_headers = {'Authorization': 'Bearer ' +
                        json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
         res_sub_activity = json.loads(requests.get(
             url=sub_activity_uri, headers=req_headers).text)
         if(len(res_sub_activity['value']) != 0):
             for items in res_sub_activity['value']:
-                data_sub_activity['Action']=items['authorization']['action']
-                data_sub_activity['Caller']=items['caller']
-                data_sub_activity['Category']=items['category']['localizedValue']
-                data_sub_activity['Resource']=(items['resourceId']).split("/")[-1]
-                data_sub_activity['ResourceType']=items['resourceType']['localizedValue']
-                data_sub_activity['Status']=items['status']['localizedValue']
-                data_sub_activity['EventTime']=items['eventTimestamp'] 
-                activity_Logs.append(data_sub_activity.copy())             
+                if items['caller'] == '13f6808c-5df7-4fe7-bd9b-11445e0e6797':
+                    data_sub_activity['Action']=items['authorization']['action']
+                    data_sub_activity['Category']=items['category']['localizedValue']
+                    data_sub_activity['Resource']=(items['resourceId']).split("/")[4]
+                    data_sub_activity['ResourceType']=items['resourceType']['localizedValue']
+                    data_sub_activity['Status']=items['status']['localizedValue']
+                    data_sub_activity['EventTime']=items['eventTimestamp']
+                    activity_Logs.append(data_sub_activity.copy())             
     
         #print(activity_Logs)    
 
@@ -521,6 +524,35 @@ def activitylogs():
         
     finally:
         return render_template("activitylogs.html", activity_logs = activity_Logs)
+    
+@app.route('/criticalorerrorlogs', methods=['GET', 'POST'])
+def criticalorerrorlogs():
+    data_cri_activity = {}
+    critical_Logs = []
+    try:
+        sub_activity_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Insights/eventtypes/management/values?api-version=2015-04-01&$filter=eventTimestamp ge '" + str(fulltimeStamp) +"'"
+        req_headers = {'Authorization': 'Bearer ' +
+                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
+        res_sub_activity = json.loads(requests.get(
+            url=sub_activity_uri, headers=req_headers).text)
+        if(len(res_sub_activity['value']) != 0):
+            for items in res_sub_activity['value']:
+                if items['level'] == 'Error'or items['level'] == 'Critical':
+                    data_cri_activity['Action']=items['authorization']['action']
+                    data_cri_activity['Category']=items['category']['localizedValue']
+                    data_cri_activity['Resource']=(items['resourceId']).split("/")[4]
+                    data_cri_activity['ResourceType']=items['resourceType']['localizedValue']
+                    data_cri_activity['Status']=items['status']['localizedValue']
+                    data_cri_activity['EventTime']=items['eventTimestamp']
+                    critical_Logs.append(data_cri_activity.copy())             
+    
+        #print(activity_Logs)    
+
+    except ClientAuthenticationError as ex:
+        print(ex.message)
+        
+    finally:
+        return render_template("criticalLogs.html", activity_logs = critical_Logs)
     
 @app.route('/recommendations', methods=['GET', 'POST'])
 def recommendations():
@@ -541,7 +573,10 @@ def recommendations():
             for items in res_sub_recommendations['value']:
                 sub_recom_json['category'] = items['properties']['category']
                 sub_recom_json['impact'] = items['properties']['impact']
-                sub_recom_json['impactedField'] = items['properties']['impactedField']
+                if items['properties']['impactedField'] != "":
+                    sub_recom_json['impactedField'] = items['properties']['impactedField']
+                else:
+                    sub_recom_json['impactedField'] = ""
                 sub_recom_json['impactedValue'] = items['properties']['impactedValue']
                 sub_recom_json['problem'] = items['properties']['shortDescription']['problem']
                 sub_recom_json['solution'] = items['properties']['shortDescription']['solution']
