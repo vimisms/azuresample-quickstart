@@ -14,7 +14,7 @@ import random
 app = Flask(__name__)
 
 
-vault_uri = "https://neo-rbac-webapp-kv.vault.azure.net/"
+vault_uri = "https://neo-rbac-kv.vault.azure.net/"
 credential = DefaultAzureCredential()
 client = SecretClient(vault_url=vault_uri, credential=credential)
 secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
