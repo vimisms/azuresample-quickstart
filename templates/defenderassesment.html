@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-        <script src="{{ url_for('static', filename='coreassesmentsearch.js') }}"></script>
-        {% block head %}
-            <title>
-                {% block title %}{% endblock %}
-            - Azure Subscription Scanner</title>
-        {% endblock %}
-    </head>
-    <body>
-        <div id="bodyheader">Azure Custom Compliance Portal</div>
-        
-        <div class="nav_btns">
-            <form action="/home" method = "post">
-                <input type="submit" value="View Full Report">
-            </form>
-            <form action="/stgcompliance" method = "post">
-                <input type="submit" value="View Storage Accout Compliance" >
-            </form>
-            <form action="/syncompliance" method = "post">
-                <input type="submit" value="View Synapse Compliance">
-            </form>
-            <form action="/sqlcompliance" method = "post">
-                <input type="submit" value="View SQL Compliance">
-            </form>
-            <form action="/kvcompliance" method = "post">
-                <input type="submit" value="View Key Vault Compliance">
-            </form>
-        </div>
-        <div class = "centerheading">Defender Assesments by Resource [UnHealthy]</div>
-        <input type="text" id="defheasearch" onkeyup="searchHealthy()" placeholder="Search for assesment.." style="margin-left:130px">
-        <table id="defhealthy">
-            <thead>
-                <tr>
-                    <th>Resource Name</th>
-                    <th>Rule</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for items in assesment_unhealthy %}
-                    <tr>
-                        <td>{{ items['Resource'] }}</td>
-                        <td>{{ items['Rule'] }}</td>
-                        <td>{{ items['Status'] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class = "centerheading">Defender Assesments by Resource [healthy]</div>
-        <input type="text" id="defunheasearch" onkeyup="searchUnHealthy()" placeholder="Search for assesment.." style="margin-left:130px">
-        <table id="defunhealthy">
-            <thead>
-                <tr>
-                    <th>Resource Name</th>
-                    <th>Rule</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for items in assesment_healthy %}
-                    <tr>
-                        <td>{{ items['Resource'] }}</td>
-                        <td>{{ items['Rule'] }}</td>
-                        <td>{{ items['Status'] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-       
-    </body>
+  <head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <script src="{{ url_for('static', filename='coreassesmentsearch.js') }}"></script>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - Azure Subscription Scanner</title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="bodyheader">Azure Custom Compliance Portal</div>
+
+    <div class="nav_btns">
+      <form action="/home" method="post">
+        <input type="submit" value="View Full Report" />
+      </form>
+    </div>
+    <div class="centerheading">Defender Assesments by Resource [UnHealthy]</div>
+    <input
+      type="text"
+      id="defheasearch"
+      onkeyup="searchHealthy()"
+      placeholder="Search for assesment.."
+      style="margin-left: 130px"
+    />
+    <table id="defhealthy">
+      <thead>
+        <tr>
+          <th>Resource Name</th>
+          <th>Rule</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for items in assesment_unhealthy %}
+        <tr>
+          <td>{{ items['Resource'] }}</td>
+          <td>{{ items['Rule'] }}</td>
+          <td>{{ items['Status'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="centerheading">Defender Assesments by Resource [healthy]</div>
+    <input
+      type="text"
+      id="defunheasearch"
+      onkeyup="searchUnHealthy()"
+      placeholder="Search for assesment.."
+      style="margin-left: 130px"
+    />
+    <table id="defunhealthy">
+      <thead>
+        <tr>
+          <th>Resource Name</th>
+          <th>Rule</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for items in assesment_healthy %}
+        <tr>
+          <td>{{ items['Resource'] }}</td>
+          <td>{{ items['Rule'] }}</td>
+          <td>{{ items['Status'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
 </html>

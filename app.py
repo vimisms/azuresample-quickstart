@@ -14,18 +14,21 @@ import random
 app = Flask(__name__)
 
 
-vault_uri = "https://neo-rbac-kv.vault.azure.net/"
+vault_uri = os.environ["VAULT_URL"]
+#vault_uri = "https://neo-rbac-kv.vault.azure.net/"
 credential = DefaultAzureCredential()
 client = SecretClient(vault_url=vault_uri, credential=credential)
-secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
+secret_name = os.environ["CLIENT_ID"]
+tenant_id = os.environ["TENANT_ID"]
+#secret_name = '2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b'
 bank_secret = client.get_secret(secret_name)
 timeStamp = date.today()-timedelta(30)
 fulltimeStamp = date.today()-timedelta(88)
 ###Get token for resource manager API###
 
-mgmt_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/token"
+mgmt_token_uri = "https://login.microsoftonline.com/"+ str(tenant_id) + "/oauth2/token"
 mgmt_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
-mgmt_req_body = 'grant_type=client_credentials&client_secret='+str(bank_secret.value)+'&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&resource=https%3A%2F%2Fmanagement.azure.com%2F'
+mgmt_req_body = 'grant_type=client_credentials&client_secret='+str(bank_secret.value)+'&client_id='+str(secret_name)+'&resource=https%3A%2F%2Fmanagement.azure.com%2F'
 mgmtresponse = requests.request(
     "POST", mgmt_token_uri, headers=mgmt_req_headers, data=mgmt_req_body)
 #print("mgmt token is \n" + str(mgmtresponse.text))
@@ -33,9 +36,9 @@ mgmtresponse = requests.request(
 
 ###Get token for Graph to get user name from principle ID###
 
-graph_token_uri = "https://login.microsoftonline.com/e18a0c35-c3ed-46f4-8e69-018ca67f8288/oauth2/v2.0/token"
+graph_token_uri = "https://login.microsoftonline.com/"+ str(tenant_id) +"/oauth2/v2.0/token"
 graph_req_headers = {'content-type': 'application/x-www-form-urlencodeds'}
-graph_req_body = 'grant_type=client_credentials&client_secret='+str(bank_secret.value)+'&client_id=2b0ce5a8-0146-4b0c-a7ef-eccdb99b555b&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
+graph_req_body = 'grant_type=client_credentials&client_secret='+str(bank_secret.value)+'&client_id='+str(secret_name)+'&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default'
 graphresponse = requests.request(
     "POST", graph_token_uri, headers=graph_req_headers, data=graph_req_body)
 
@@ -618,347 +621,7 @@ def policyexemptions():
         
     finally:
         return render_template("policyexemptions.html", exemptions = sub_exempt)
-    
-@app.route('/stgcompliance', methods=['GET', 'POST'])
-def stgcompliance():
-        
-    try:
-               
-        storage_account_pvt_json = {}
-        storage_account_pub_json = {}
-        storage_account_tls_json = {}
-        storage_account_enc_json = {}   
-        storage_account_diag_json = {}
-        blob_diag_json = {}
-        table_diag_json = {}
-        file_diag_json = {}
-        queue_diag_json = {}
-        storage_account_checks_list = []
-        resource_pvt_name = []
-        resource_tls_name = []
-        resource_enc_name = []
-        resource_pub_name = []
-        stg_diag = []
-        blob_diag = []
-        que_diag = []
-        file_diag = []
-        table_diag = []
-        stg_acct_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Storage/storageAccounts?api-version=2021-09-01"
-        req_headers = {'Authorization': 'Bearer ' +
-                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_response = json.loads(requests.get(url=stg_acct_uri, headers=req_headers).text)
-        for items in res_response['value']:
-            if len(items['properties']['privateEndpointConnections']) == 0:
-                resource_pvt_name.append(items['name'])
-        if len(resource_pvt_name) != 0:
-            storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
-            storage_account_pvt_json['Status'] = "Failed"
-            storage_account_pvt_json['Resource'] = str(",".join(resource_pvt_name))
-            storage_account_checks_list.append(storage_account_pvt_json.copy())
-        else:
-            storage_account_pvt_json['ComplianceName'] = "All Storage accounts must have private end point connections"
-            storage_account_pvt_json['Status'] = "Passed"
-            
-                
-        for items in res_response['value']:
-            if items['properties']['minimumTlsVersion'] != "TLS1_2":
-                resource_tls_name.append(items['name'])
-        
-        if len(resource_tls_name) != 0:
-            storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
-            storage_account_tls_json['Status'] = "Failed"
-            storage_account_tls_json['Resource'] = str(",".join(resource_tls_name))
-            storage_account_checks_list.append(storage_account_tls_json.copy())
-        else:
-            storage_account_tls_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
-            storage_account_tls_json['Status'] = "Passed"
-                       
-                 
-                
-        for items in res_response['value']:            
-            if items['properties']['encryption']['keySource'] != "Microsoft.Keyvault":
-                resource_enc_name.append(items['name'])
-        
-        if len(resource_enc_name) != 0:
-            storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
-            storage_account_enc_json['Status'] = "Failed"
-            storage_account_enc_json['Resource'] = str(",".join(resource_enc_name))
-            storage_account_checks_list.append(storage_account_enc_json.copy())                                        
-        else:
-            storage_account_enc_json['ComplianceName'] = "All Storage accounts must have customer managed encryption"
-            storage_account_enc_json['Status'] = "Passed"
-            
-                
-        for items in res_response['value']:
-            if items['properties']['networkAcls']['defaultAction']  == 'Allow':
-                resource_pub_name.append(items['name'])
-                   
-        if len(resource_pub_name) != 0:
-            storage_account_pub_json['ComplianceName'] = "All Storage accounts must have public network disabled"
-            storage_account_pub_json['Status'] = "Failed"
-            storage_account_pub_json['Resource'] = str(",".join(resource_pub_name))
-            storage_account_checks_list.append(storage_account_pub_json.copy()) 
-        else:
-            storage_account_pub_json['ComplianceName'] = "All Storage accounts must have public network disabled"
-            storage_account_pub_json['Status'] = "Passed"
-            
-        for items in res_response['value']:
-            stg_diag_uri = "https://management.azure.com"+items['id']+"/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-05-01-preview"
-            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-            res_response = json.loads(requests.get(url=stg_diag_uri, headers=req_headers).text)
-            if len(res_response['value']) == 0:
-                stg_diag.append(items['name'])
-                
-        if len(stg_diag) != 0:
-            storage_account_diag_json['ComplianceName'] = "All Storage accounts must have diagnostic enabled"
-            storage_account_diag_json['Status'] = "Failed"
-            storage_account_diag_json['Resource'] = str(",".join(stg_diag))
-            storage_account_checks_list.append(storage_account_diag_json.copy())    
-            
-        for items in res_response['value']:
-            blob_diag_uri = "https://management.azure.com"+items['id']+"/blobServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=api-version=2021-05-01-preview"
-            print(blob_diag_uri)
-            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-            res_response = json.loads(requests.get(url=blob_diag_uri, headers=req_headers).text)
-            print(res_response)
-            if len(res_response['value']) == 0:
-                blob_diag.append(items['name'])
-                
-        if len(blob_diag) != 0:
-            blob_diag_json['ComplianceName'] = "All Storage accounts BLOB Service must have diagnostic enabled"
-            blob_diag_json['Status'] = "Failed"
-            blob_diag_json['Resource'] = str(",".join(blob_diag))
-            storage_account_checks_list.append(blob_diag_json.copy()) 
-            
-        for items in res_response['value']:
-            table_diag_uri = "https://management.azure.com"+items['id']+"/tableServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=api-version=2021-05-01-preview"
-            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-            res_response = json.loads(requests.get(url=table_diag_uri, headers=req_headers).text)
-            if len(res_response['value']) == 0:
-                table_diag.append(items['name'])
-                
-        if len(table_diag) != 0:
-            table_diag_json['ComplianceName'] = "All Storage accounts TABLE Service must have diagnostic enabled"
-            table_diag_json['Status'] = "Failed"
-            table_diag_json['Resource'] = str(",".join(table_diag))
-            storage_account_checks_list.append(table_diag_json.copy())    
-            
-        for items in res_response['value']:
-            file_diag_uri = "https://management.azure.com"+items['id']+"/fileServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=api-version=2021-05-01-preview"
-            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-            res_response = json.loads(requests.get(url=file_diag_uri, headers=req_headers).text)
-            if len(res_response['value']) == 0:
-                file_diag.append(items['name'])
-                
-        if len(file_diag) != 0:
-            file_diag_json['ComplianceName'] = "All Storage accounts FILE Service must have diagnostic enabled"
-            file_diag_json['Status'] = "Failed"
-            file_diag_json['Resource'] = str(",".join(file_diag))
-            storage_account_checks_list.append(file_diag_json.copy()) 
-            
-        for items in res_response['value']:
-            queue_diag_uri = "https://management.azure.com"+items['id']+"/queueServices/default/providers/Microsoft.Insights/diagnosticSettings?api-version=2021-09-01"
-            req_headers = {'Authorization': 'Bearer ' + json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-            res_response = json.loads(requests.get(url=queue_diag_uri, headers=req_headers).text)
-            if len(res_response['value']) == 0:
-                que_diag.append(items['name'])
-                
-        if len(que_diag) != 0:
-            queue_diag_json['ComplianceName'] = "All Storage accounts FILE Service must have diagnostic enabled"
-            queue_diag_json['Status'] = "Failed"
-            queue_diag_json['Resource'] = str(",".join(que_diag))
-            storage_account_checks_list.append(queue_diag_json.copy())
-            
-    except ClientAuthenticationError as ex:
-        print(ex.message)
-        
-    finally:
-        return render_template("stgcompliance.html", stg_compliance = storage_account_checks_list)
-    
-@app.route('/sqlcompliance', methods=['GET', 'POST'])
-def sqlcompliance():
-    try:
-        sql_pvt_json={}
-        sql_pvt=[]
-        sql_aad_json={}
-        sql_aad=[]
-        sql_pri_json={}
-        sql_pri=[]
-        sql_aadonly_json = {}
-        sql_aadonly=[]
-        sql_pub_json={}
-        sql_pub=[]
-        sql_auth_json={}
-        sql_auth=[]
-        
-        sql_check_list=[]
-        sql_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.Sql/servers?api-version=2020-11-01-preview"
-        req_headers = {'Authorization': 'Bearer ' +
-                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_sql = json.loads(requests.get(
-            url=sql_uri, headers=req_headers).text)
-        for items in res_sql['value']:
-            if len(items['properties']['privateEndpointConnections']) == 0:
-                sql_pvt.append(items['name'])
-                
-        if len(sql_pvt) != 0:
-            sql_pvt_json['ComplianceName'] = "All SQLs must have private end point connections"
-            sql_pvt_json['Status'] = "Failed"
-            sql_pvt_json['Resource'] = str(",".join(sql_pvt))
-            sql_check_list.append(sql_pvt_json.copy())
-        else:
-            sql_pvt_json['ComplianceName'] = "All Storage accounts must have at least TLS 1.2"
-            sql_pvt_json['Status'] = "Passed"
-                
-        for items in res_sql['value']:
-            if items['properties']['publicNetworkAccess'] == "Enabled":
-                sql_pub.append(items['name'])
-                
-        if len(sql_pub) != 0:
-            sql_pub_json['ComplianceName'] = "All SQLs must have public network disabled"
-            sql_pub_json['Status'] = "Failed"
-            sql_pub_json['Resource'] = str(",".join(sql_pub))
-            sql_check_list.append(sql_pub_json.copy())
-        else:
-            sql_pub_json['ComplianceName'] = "All SQLs must have public network disabled"
-            sql_pub_json['Status'] = "Passed"  
-        
-        for items in res_sql['value']:
-            if 'administrators' in (items['properties']).keys():
-                if 'azureADOnlyAuthentication' in (items['properties']['administrators']).keys() and items['properties']['administrators']['azureADOnlyAuthentication'] != 'true':
-                    sql_aadonly.append(items['name'])
-                elif 'administrators' in (items['properties']).keys() and items['properties']['administrators']['principalType'] != "Group":
-                    sql_pri.append(items['name'])
-                elif 'administrators' in (items['properties']).keys() and items['properties']['administrators']['administratorType'] != "ActiveDirectory":
-                    sql_aad.append(items['name'])
-            else:
-                sql_auth.append(items['name'])
-        
-        if len(sql_auth) != 0:
-            sql_auth_json['ComplianceName'] = "All SQLs must have AD authentication enabled"
-            sql_auth_json['Status'] = "Failed"
-            sql_auth_json['Resource'] = str(",".join(sql_auth))
-            sql_check_list.append(sql_auth_json.copy())
-        
-        if len(sql_aadonly) != 0:
-            sql_aadonly_json['ComplianceName'] = "All SQLs must have only AAD authentication"
-            sql_aadonly_json['Status'] = "Failed"
-            sql_aadonly_json['Resource'] = str(",".join(sql_aadonly))
-            sql_check_list.append(sql_aadonly_json.copy())
-            
-        if len(sql_pri) != 0:
-            sql_pri_json['ComplianceName'] = "All SQLs must have AD group as Active directory owner"
-            sql_pri_json['Status'] = "Failed"
-            sql_pri_json['Resource'] = str(",".join(sql_pri))
-            sql_check_list.append(sql_pri_json.copy())
-               
-                                     
-        
-    except ClientAuthenticationError as ex:
-        print(ex.message)
-        
-    finally:
-        print(sql_check_list)
-        return render_template("sqlcompliance.html", sql_compliance = sql_check_list)
-    
-
-@app.route('/kvcompliance', methods=['GET', 'POST'])
-def kvcompliance():
-    try:
-        kv_pub_json={}
-        kv_pub=[]
-        kv_rbac_json={}
-        kv_rbac=[]
-        kv_sd_json={}
-        kv_sd=[]
-        kv_pp_json = {}
-        kv_pp=[]
-        kv_sku_json={}
-        kv_sku=[]
-        
-        
-        kv_check_list=[]
-        kv_uri = "https://management.azure.com/subscriptions/"+query_data_subscription+"/providers/Microsoft.KeyVault/vaults?api-version=2021-10-01"
-        req_headers = {'Authorization': 'Bearer ' +
-                       json.loads(mgmtresponse.text)['access_token'], 'Content-Type': 'Application/JSON'}
-        res_kv = json.loads(requests.get(
-            url=kv_uri, headers=req_headers).text)
-        for items in res_kv['value']:
-            if items['properties']['publicNetworkAccess'] == 'Enabled':
-                kv_pub.append(items['name'])
-                
-        if len(kv_pub) != 0:
-            kv_pub_json['ComplianceName'] = "All Key Vaults must have public network disabled"
-            kv_pub_json['Status'] = "Failed"
-            kv_pub_json['Resource'] = str(",".join(kv_pub))
-            kv_check_list.append(kv_pub_json.copy())
-        else:
-            kv_pub_json['ComplianceName'] = "All Key Vaults must have public network disabled"
-            kv_pub_json['Status'] = "Passed"
-                
-        for items in res_kv['value']:
-            if items['properties']['enableRbacAuthorization'] == False:
-                kv_rbac.append(items['name'])
-                
-        if len(kv_rbac) != 0:
-            kv_rbac_json['ComplianceName'] = "All Key Vaults must have RBAC enabled"
-            kv_rbac_json['Status'] = "Failed"
-            kv_rbac_json['Resource'] = str(",".join(kv_rbac))
-            kv_check_list.append(kv_rbac_json.copy())
-        else:
-            kv_rbac_json['ComplianceName'] = "All Key Vaults must have RBAC enabled"
-            kv_rbac_json['Status'] = "Passed"  
-            
-        for items in res_kv['value']:
-            if items['properties']['enableSoftDelete'] == False:
-                kv_sd.append(items['name'])
-                
-        if len(kv_sd) != 0:
-            kv_sd_json['ComplianceName'] = "All Key Vaults must have Soft Delete enabled"
-            kv_sd_json['Status'] = "Failed"
-            kv_sd_json['Resource'] = str(",".join(kv_sd))
-            kv_check_list.append(kv_sd_json.copy())
-        else:
-            kv_sd_json['ComplianceName'] = "All Key Vaults must have Soft Delete enabled"
-            kv_sd_json['Status'] = "Passed" 
-        
-        for items in res_kv['value']:
-            if items['properties']['enablePurgeProtection'] == False:
-                kv_pp.append(items['name'])
-                
-        if len(kv_pp) != 0:
-            kv_pp_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
-            kv_pp_json['Status'] = "Failed"
-            kv_pp_json['Resource'] = str(",".join(kv_pp))
-            kv_check_list.append(kv_pp_json.copy())
-        else:
-            kv_pp_json['ComplianceName'] = "All Key Vaults must have Purge protection enabled"
-            kv_pp_json['Status'] = "Passed" 
-            
-        for items in res_kv['value']:
-            if items['properties']['sku']['name'] != "Premium":
-                kv_sku.append(items['name'])
-                
-        if len(kv_sku) != 0:
-            kv_sku_json['ComplianceName'] = "All Key Vaults must have premium SKU"
-            kv_sku_json['Status'] = "Failed"
-            kv_sku_json['Resource'] = str(",".join(kv_sku))
-            kv_check_list.append(kv_sku_json.copy())
-        else:
-            kv_sku_json['ComplianceName'] = "All Key Vaults must have premium SKU"
-            kv_sku_json['Status'] = "Passed"
-        
-               
-                                     
-        
-    except ClientAuthenticationError as ex:
-        print(ex.message)
-        
-    finally:
-        
-        return render_template("kvcompliance.html", kv_compliance = kv_check_list)
-                
-        
+         
             
     
              
